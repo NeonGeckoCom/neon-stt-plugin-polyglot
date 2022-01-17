@@ -34,7 +34,7 @@ from threading import Event
 from neon_utils.file_utils import get_audio_file_stream
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
-from neon_stt_plugin_TODO_NAME import TemplateStreamingSTT  # TODO: Update Import
+from neon_stt_plugin_polyglot import TemplateStreamingSTT  # TODO: Update Import
 
 ROOT_DIR = os.path.dirname(os.path.realpath(__file__))
 TEST_PATH = os.path.join(ROOT_DIR, "test_audio")
