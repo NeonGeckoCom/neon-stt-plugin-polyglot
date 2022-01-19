@@ -106,6 +106,6 @@ class PolyglotSTT(STT):
 
 
 if __name__ == "__main__":
-    filename = '/tests/test_audio/pl/czy_oś_nadal_się_obraca_male.wav'
+    filename = '/home/mary/PycharmProjects/neon-stt-plugin-polyglot/tests/test_audio/pl/czy_oś_nadal_się_obraca_male.wav'
     stt = PolyglotSTT('pl', filename)
     stt.execute()
