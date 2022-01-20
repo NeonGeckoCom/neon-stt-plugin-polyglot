@@ -71,7 +71,7 @@ class TestGetSTT(unittest.TestCase):
             transcription = ' '.join(file.split('_')[:-1]).lower()
             path = ROOT_DIR+'/test_audio/en/'+file
             stt = PolyglotSTT('en', path)
-            text = stt.execute()
+            text = stt.execute(path)
             error = wer(transcription.strip(), text.strip())
             LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(transcription, text, error))
             self.assertTrue(error < 0.6)
@@ -82,7 +82,7 @@ class TestGetSTT(unittest.TestCase):
             transcription = ' '.join(file.split('_')[:-1]).lower()
             path = ROOT_DIR + '/test_audio/fr/' + file
             stt = PolyglotSTT('fr', path)
-            text = stt.execute()
+            text = stt.execute(path)
             result = transliteration(transcription, text, 'fr')
             LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(result[1], result[2], result[0]))
             self.assertTrue(result[0] < 0.6)
@@ -93,7 +93,7 @@ class TestGetSTT(unittest.TestCase):
             transcription = ' '.join(file.split('_')[:-1]).lower()
             path = ROOT_DIR + '/test_audio/es/' + file
             stt = PolyglotSTT('es', path)
-            text = stt.execute()
+            text = stt.execute(path)
             result = transliteration(transcription, text, 'es')
             LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(result[1], result[2], result[0]))
             self.assertTrue(result[0] < 0.6)
@@ -104,7 +104,7 @@ class TestGetSTT(unittest.TestCase):
             transcription = ' '.join(file.split('_')[:-1]).lower()
             path = ROOT_DIR + '/test_audio/pl/' + file
             stt = PolyglotSTT('pl', path)
-            text = stt.execute()
+            text = stt.execute(path)
             result = transliteration(transcription, text, 'pl')
             LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(result[1], result[2], result[0]))
             self.assertTrue(result[0] < 0.6)

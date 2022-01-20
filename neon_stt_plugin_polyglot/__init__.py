@@ -50,6 +50,7 @@ class PolyglotSTT(STT):
         """
         Model and scorer initialization for the specific language.
         """
+        super().__init__()
         self.audio = audio
         self.lang = lang or 'en'
         # Model creation
@@ -82,10 +83,10 @@ class PolyglotSTT(STT):
         return desired_sample_rate, np.frombuffer(output, np.int16)
 
 
-    def execute(self, language=None):
+    def execute(self, audio, language=None):
         desired_sample_rate = self.model.sampleRate()
         # reading audio file
-        fin = wave.open(self.audio, 'rb')
+        fin = wave.open(audio, 'rb')
         fs_orig = fin.getframerate()
         if fs_orig != desired_sample_rate:
             LOG.info('Warning: original sample rate ({}) is different than {}hz. Resampling might produce erratic speech recognition.'.format(
