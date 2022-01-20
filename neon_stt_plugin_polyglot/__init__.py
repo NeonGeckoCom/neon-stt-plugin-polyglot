@@ -103,9 +103,3 @@ class PolyglotSTT(STT):
         inference_end = timer() - inference_start
         LOG.info('Inference took %0.3fs for %0.3fs audio file.' % (inference_end, audio_length))
         return str(self.model.stt(audio))
-
-
-if __name__ == "__main__":
-    filename = '/home/mary/PycharmProjects/neon-stt-plugin-polyglot/tests/test_audio/pl/czy_oś_nadal_się_obraca_male.wav'
-    stt = PolyglotSTT('pl', filename)
-    stt.execute()
