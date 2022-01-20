@@ -73,7 +73,7 @@ class TestGetSTT(unittest.TestCase):
             stt = PolyglotSTT('en', path)
             text = stt.execute()
             error = wer(transcription.strip(), text.strip())
-            print(error)
+            LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(transcription, text, error))
             self.assertTrue(error < 0.6)
 
     def test_fr_stt(self):
@@ -84,7 +84,7 @@ class TestGetSTT(unittest.TestCase):
             stt = PolyglotSTT('fr', path)
             text = stt.execute()
             result = transliteration(transcription, text, 'fr')
-            print(result)
+            LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(result[1], result[2], result[0]))
             self.assertTrue(result[0] < 0.6)
 
     def test_es_stt(self):
@@ -95,7 +95,7 @@ class TestGetSTT(unittest.TestCase):
             stt = PolyglotSTT('es', path)
             text = stt.execute()
             result = transliteration(transcription, text, 'es')
-            print(result)
+            LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(result[1], result[2], result[0]))
             self.assertTrue(result[0] < 0.6)
 
     def test_pl_stt(self):
@@ -106,7 +106,7 @@ class TestGetSTT(unittest.TestCase):
             stt = PolyglotSTT('pl', path)
             text = stt.execute()
             result = transliteration(transcription, text, 'pl')
-            print(result)
+            LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(result[1], result[2], result[0]))
             self.assertTrue(result[0] < 0.6)
 
 if __name__ == '__main__':
