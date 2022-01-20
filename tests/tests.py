@@ -24,93 +24,90 @@ from neon_stt_plugin_polyglot import PolyglotSTT
 from ovos_utils.log import LOG
 import unittest
 import os
-import re
-
-
-
+from jiwer import wer
 
 ROOT_DIR = os.path.dirname(os.path.realpath(__file__))
-TEST_PATH_DE = os.path.join(ROOT_DIR, "test_audio/de")
 TEST_PATH_EN = os.path.join(ROOT_DIR, "test_audio/en")
 TEST_PATH_FR = os.path.join(ROOT_DIR, "test_audio/fr")
 TEST_PATH_ES = os.path.join(ROOT_DIR, "test_audio/es")
-TEST_PATH_IT = os.path.join(ROOT_DIR, "test_audio/it")
 TEST_PATH_PL = os.path.join(ROOT_DIR, "test_audio/pl")
 
+def transliteration(transcription, text, lang):
+    transliterated = []
+    if lang == 'pl':
+        translit_dict = {'a': ['ą'], 'c': ['ć'], 'e': ['ę'], 'n': ['ń'], 'o': ['ó'], 's': ['ś'], 'z': ['ź', 'ż']}
+    if lang == 'fr':
+        translit_dict = {'c': ['ç'], 'e': ['é', 'ê', 'è', 'ë'], 'a': ['â', 'à'], 'i': ['î', 'ì', 'ï'],
+                         'o': ['ô', 'ò'], 'u': ['û', 'ù', 'ü']}
+    if lang == 'es':
+        translit_dict = {'a': ['á'], 'i': ['í'], 'e': ['é'], 'n': ['ñ'], 'o': ['ó'], 'u': ['ú', 'ü']}
+    if len(transcription.strip()) == len(text.strip()):
+        for ind, letter in enumerate(transcription):
+            if letter in translit_dict.keys():
+                if letter != text[ind]:
+                    for l in translit_dict[letter]:
+                        if l == text[ind]:
+                                transliterated.append(l)
+                else:
+                        transliterated.append(letter)
+            else:
+                    transliterated.append(letter)
+        translit_str = ''.join(transliterated)
+        if translit_str != '':
+            error = wer(translit_str.strip(), text.strip())
+            return error, translit_str, text
+        else:
+            error = wer(transcription.strip(), text.strip())
+            return error, transcription, text
+    else:
+        error = wer(transcription.strip(), text.strip())
+        return error, transcription, text
 
 class TestGetSTT(unittest.TestCase):
 
     def test_en_stt(self):
         LOG.info("ENGLISH STT MODEL")
         for file in os.listdir(TEST_PATH_EN):
-            transcription = ' '.join(file.split('_')[:-1])
+            transcription = ' '.join(file.split('_')[:-1]).lower()
             path = ROOT_DIR+'/test_audio/en/'+file
             stt = PolyglotSTT('en', path)
             text = stt.execute()
-            print(transcription)
-            print(text)
-            # self.assertIn(text.strip(), transcription)
-            # self.assertNotEqual(text, 'he')
-
-    def test_de_stt(self):
-        LOG.info("GERMAN STT MODEL")
-        for file in os.listdir(TEST_PATH_DE):
-            transcription = ' '.join(file.split('_')[:-1])
-            path = ROOT_DIR + '/test_audio/de/' + file
-            stt = PolyglotSTT('de', path)
-            text = stt.execute()
-            print(transcription)
-            print(text)
-            # self.assertIn(text.strip(), transcription)
-            # self.assertNotEqual(text, 'he')
+            error = wer(transcription.strip(), text.strip())
+            print(error)
+            self.assertTrue(error < 0.6)
 
     def test_fr_stt(self):
         LOG.info("FRENCH STT MODEL")
         for file in os.listdir(TEST_PATH_FR):
-            transcription = ' '.join(file.split('_')[:-1])
+            transcription = ' '.join(file.split('_')[:-1]).lower()
             path = ROOT_DIR + '/test_audio/fr/' + file
             stt = PolyglotSTT('fr', path)
             text = stt.execute()
-            print(transcription)
-            print(text)
-            # self.assertIn(text.strip(), transcription)
-            # self.assertNotEqual(text, 'he')
+            result = transliteration(transcription, text, 'fr')
+            print(result)
+            self.assertTrue(result[0] < 0.6)
 
     def test_es_stt(self):
         LOG.info("SPANISH STT MODEL")
         for file in os.listdir(TEST_PATH_ES):
-            transcription = ' '.join(file.split('_')[:-1])
+            transcription = ' '.join(file.split('_')[:-1]).lower()
             path = ROOT_DIR + '/test_audio/es/' + file
             stt = PolyglotSTT('es', path)
             text = stt.execute()
-            print(transcription)
-            print(text)
-            # self.assertIn(text.strip(), transcription)
-            # self.assertNotEqual(text, 'he')
-
-    def test_it_stt(self):
-        LOG.info("ITALIAN STT MODEL")
-        for file in os.listdir(TEST_PATH_IT):
-            transcription = ' '.join(file.split('_')[:-1])
-            path = ROOT_DIR + '/test_audio/it/' + file
-            stt = PolyglotSTT('it', path)
-            text = stt.execute()
-            print(transcription)
-            print(text)
-            # self.assertIn(text.strip(), transcription)
-            # self.assertNotEqual(text, 'he')
+            result = transliteration(transcription, text, 'es')
+            print(result)
+            self.assertTrue(result[0] < 0.6)
 
     def test_pl_stt(self):
         LOG.info("POLISH STT MODEL")
         for file in os.listdir(TEST_PATH_PL):
-            transcription = ' '.join(file.split('_')[:-1])
+            transcription = ' '.join(file.split('_')[:-1]).lower()
             path = ROOT_DIR + '/test_audio/pl/' + file
             stt = PolyglotSTT('pl', path)
             text = stt.execute()
-            print(transcription)
-            print(text)
-            # self.assertIn(text.strip(), transcription)
-            # self.assertNotEqual(text, 'he')
+            result = transliteration(transcription, text, 'pl')
+            print(result)
+            self.assertTrue(result[0] < 0.6)
 
 if __name__ == '__main__':
     unittest.main()
