@@ -102,7 +102,7 @@ class TestGetSTT(unittest.TestCase):
             text = stt.execute(path)
             result = transliteration(transcription, text, 'es')
             LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(result[1], result[2], result[0]))
-            # self.assertTrue(result[0] < 0.6)
+            self.assertTrue(result[0] < 0.6)
 
     def test_pl_stt(self):
         LOG.info("POLISH STT MODEL")
@@ -113,7 +113,7 @@ class TestGetSTT(unittest.TestCase):
             text = stt.execute(path)
             result = transliteration(transcription, text, 'pl')
             LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(result[1], result[2], result[0]))
-            # self.assertTrue(result[0] < 0.6)
+            self.assertTrue(result[0] < 0.6)
 
 if __name__ == '__main__':
     unittest.main()
