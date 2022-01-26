@@ -4,4 +4,6 @@ numpy
 neon_speech
 neon_utils
 wave
+xdg
+neon_sftp
 # TODO: Dependencies

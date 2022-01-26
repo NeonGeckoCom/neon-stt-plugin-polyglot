@@ -31,12 +31,14 @@ import numpy as np
 from neon_speech.stt import STT
 import os
 from neon_utils.logger import LOG
-from os import listdir
-from os.path import join
+from os.path import join, exists
 import shlex
 import subprocess
 import wave
 from timeit import default_timer as timer
+from neon_sftp import NeonSFTPConnector
+import json
+from xdg import BaseDirectory as XDG
 
 try:
     from shhlex import quote
@@ -54,17 +56,49 @@ class PolyglotSTT(STT):
         self.audio = audio
         self.lang = lang or 'en'
         # Model creation
-        ROOT_DIR = os.path.dirname(os.path.realpath(__file__))
-        model_file_path = ROOT_DIR+'/Polyglot_models/'+self.lang
-        model_path = join(model_file_path, [f for f in listdir(model_file_path) if f.endswith('.pbmm')][0])
-        scorer_file_path = join(model_file_path, [f for f in listdir(model_file_path) if f.endswith('.scorer')][0])
-        model = deepspeech.Model(model_path)
-        #  Adding scorer and other parameters
-        model.enableExternalScorer(scorer_file_path)
+        model, scorer = self.download_model()
+        model = deepspeech.Model(model)
+        #  Adding scorer
+        model.enableExternalScorer(scorer)
         # setting beam width A larger beam width value generates better results at the cost of decoding time
         beam_width = 500
         model.setBeamWidth(beam_width)
         self.model = model
+
+    def download_model(self):
+        '''
+        Downloading model and scorer for the specific language
+        from server using NeonSFTPConnector plugin.
+        Creating a folder  'polyglot_models' in xdg_data_home
+        Creating a language folder in 'polyglot_models' folder
+        '''
+        folder = join(XDG.xdg_data_home, 'polyglot_models/')+self.lang
+        graph = folder + '/output_graph.pbmm'
+        scorer = folder + '/kenlm.scorer'
+        if not exists(folder):
+            if exists(join(XDG.xdg_data_home, 'polyglot_models')):
+                os.mkdir(folder)
+            else:
+                os.mkdir(join(XDG.xdg_data_home, 'polyglot_models'))
+                os.mkdir(folder)
+            LOG.info(f"Downloading model for polyglot ...")
+            LOG.info("this might take a while")
+            with open(os.environ.get('SFTP_CREDS_PATH', 'sftp_config.json')) as f:
+                sftp_creds = json.load(f)
+                NeonSFTPConnector.connector = NeonSFTPConnector(**sftp_creds)
+            get_graph = '/polyglot/'+self.lang+'/output_graph.pbmm'
+            get_scorer = '/polyglot/'+self.lang+'/kenlm.scorer'
+            NeonSFTPConnector.connector.get_file(get_from=get_graph, save_to=graph)
+            LOG.info(f"Model downloaded to {folder}")
+            NeonSFTPConnector.connector.get_file(get_from=get_scorer, save_to=scorer)
+            LOG.info(f"Scorer downloaded to {folder}")
+            model_path = graph
+            scorer_file_path = scorer
+        else:
+            model_path = graph
+            scorer_file_path = scorer
+        return model_path, scorer_file_path
+
 
     def convert_samplerate(self, audio, desired_sample_rate):
         """

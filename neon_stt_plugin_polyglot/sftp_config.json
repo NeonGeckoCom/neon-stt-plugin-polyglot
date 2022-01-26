@@ -1,0 +1,6 @@
+{
+  "host": "3333.us",
+  "username": "sftpuser",
+  "passphrase": "Neon2022!",
+  "root_path": "/mnt/volume_sfo2_01/models/stt"
+}
