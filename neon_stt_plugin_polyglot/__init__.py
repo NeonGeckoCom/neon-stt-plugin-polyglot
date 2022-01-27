@@ -76,11 +76,7 @@ class PolyglotSTT(STT):
         graph = folder + '/output_graph.pbmm'
         scorer = folder + '/kenlm.scorer'
         if not exists(folder):
-            if exists(join(XDG.xdg_data_home, 'polyglot_models')):
-                os.mkdir(folder)
-            else:
-                os.mkdir(join(XDG.xdg_data_home, 'polyglot_models'))
-                os.mkdir(folder)
+            os.makedirs(folder)
             LOG.info(f"Downloading model for polyglot ...")
             LOG.info("this might take a while")
             with open(os.environ.get('SFTP_CREDS_PATH', 'sftp_config.json')) as f:
