@@ -107,15 +107,13 @@ class TestGetSTT(unittest.TestCase):
     def test_pl_stt(self):
         LOG.info("POLISH STT MODEL")
         for file in os.listdir(TEST_PATH_PL):
-            # transcription = ' '.join(file.split('_')[:-1]).lower()
+            transcription = ' '.join(file.split('_')[:-1]).lower()
             path = ROOT_DIR + '/test_audio/pl/' + file
-            print(path)
             stt = PolyglotSTT('pl', path)
             text = stt.execute(path)
-            print(text)
-            # result = transliteration(transcription, text, 'pl')
-            # LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(result[1], result[2], result[0]))
-            # self.assertTrue(result[0] < 0.6)
+            result = transliteration(transcription, text, 'pl')
+            LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(result[1], result[2], result[0]))
+            self.assertTrue(result[0] < 0.6)
 
 if __name__ == '__main__':
     unittest.main()
