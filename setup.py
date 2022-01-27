@@ -53,7 +53,7 @@ with open("./version.py", "r", encoding="utf-8") as v:
                 version = line.split("'")[1]
 
 setup(
-    name='neon-stt-plugin-stt_module_name',  # TODO Update `stt_module_name`
+    name='neon_stt_plugin_stt_polyglot',  # TODO Update `stt_module_name`
     version=version,
     description='An STT plugin for Neon',  # TODO: Add engine/framework name
     long_description=long_description,
