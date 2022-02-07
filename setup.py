@@ -20,7 +20,6 @@
 from setuptools import setup, find_packages
 from os import getenv, path
 
-
 def get_requirements(requirements_filename: str):
     requirements_file = path.join(path.abspath(path.dirname(__file__)), "requirements", requirements_filename)
     with open(requirements_file, 'r', encoding='utf-8') as r:
@@ -39,7 +38,7 @@ def get_requirements(requirements_filename: str):
     return requirements
 
 
-PLUGIN_ENTRY_POINT = 'stt_module_name = neon_stt_plugin_polyglot:TemplateStreamingSTT'  # TODO: Update name and path
+PLUGIN_ENTRY_POINT = 'polyglot = neon_stt_plugin_polyglot:PolyglotSTT'
 
 with open("README.md", "r") as f:
     long_description = f.read()
@@ -53,16 +52,16 @@ with open("./version.py", "r", encoding="utf-8") as v:
                 version = line.split("'")[1]
 
 setup(
-    name='neon_stt_plugin_stt_polyglot',  # TODO Update `stt_module_name`
+    name='neon-stt-plugin-polyglot',
     version=version,
-    description='An STT plugin for Neon',  # TODO: Add engine/framework name
+    description='A Polyglot stt plugin for Neon',
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url='https://github.com/NeonGeckoCom/neon-stt-plugin-polyglot',  # TODO: Update link
+    url='https://github.com/NeonGeckoCom/neon-stt-plugin-polyglot',
     author='Neongecko',
     author_email='mariia@neon.ai',
-    license='BSD-3.0',
-    packages=find_packages(),
+    license='NeonAI License v1.0',
+    packages=['neon_stt_plugin_polyglot'],
     install_requires=get_requirements("requirements.txt"),
     zip_safe=True,
     classifiers=[
