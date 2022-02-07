@@ -72,7 +72,7 @@ class PolyglotSTT(STT):
         Creating a folder  'polyglot_models' in xdg_data_home
         Creating a language folder in 'polyglot_models' folder
         '''
-        folder = join(XDG.xdg_data_home, 'polyglot_models/')+self.lang
+        folder = join('polyglot_models/')+self.lang
         graph = folder + '/output_graph.pbmm'
         scorer = folder + '/kenlm.scorer'
         if not exists(folder):
