@@ -58,9 +58,9 @@ setup(
     description='An STT plugin for Neon',  # TODO: Add engine/framework name
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url='https://github.com/NeonGeckoCom/template-neon-stt-plugin',  # TODO: Update link
+    url='https://github.com/NeonGeckoCom/neon-stt-plugin-polyglot',  # TODO: Update link
     author='Neongecko',
-    author_email='developers@neon.ai',
+    author_email='mariia@neon.ai',
     license='BSD-3.0',
     packages=find_packages(),
     install_requires=get_requirements("requirements.txt"),
