@@ -57,6 +57,7 @@ class PolyglotSTT(STT):
         self.lang = lang or 'en'
         # Model creation
         model, scorer = self.download_model()
+        print(model, scorer)
         model = deepspeech.Model(model)
         #  Adding scorer
         model.enableExternalScorer(scorer)
