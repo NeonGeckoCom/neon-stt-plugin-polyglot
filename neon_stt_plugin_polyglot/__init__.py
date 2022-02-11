@@ -38,7 +38,6 @@ import wave
 from timeit import default_timer as timer
 from neon_sftp import NeonSFTPConnector
 import json
-from xdg import BaseDirectory as XDG
 
 try:
     from shhlex import quote
@@ -80,7 +79,7 @@ class PolyglotSTT(STT):
             os.makedirs(folder)
             LOG.info(f"Downloading model for polyglot ...")
             LOG.info("this might take a while")
-            with open(os.environ.get('SFTP_CREDS_PATH', 'sftp_config.json')) as f:
+            with open(os.environ.get('SFTP_CREDS_PATH', './sftp_config.json')) as f:
                 sftp_creds = json.load(f)
                 NeonSFTPConnector.connector = NeonSFTPConnector(**sftp_creds)
             get_graph = '/polyglot/'+self.lang+'/output_graph.pbmm'
