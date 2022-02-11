@@ -5,7 +5,7 @@ STT Plugin for Polyglot DeepSpeech stt models streaming Speech-to-Text.
 sudo apt-get install python3-tk-dbg
 
 # Neon-sftp installation:
-git clone --single-branch --branch initial_structure https://github.com/NeonGeckoCom/neon-sftp.git
+neon_sftp @ git+https://github.com/neon-sftp@initial_structure
 
 # Configuration:
 # TODO: Specify any optional or required configuration values
