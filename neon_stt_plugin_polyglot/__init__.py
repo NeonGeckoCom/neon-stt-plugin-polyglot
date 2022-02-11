@@ -47,12 +47,11 @@ except ImportError:
 
 class PolyglotSTT(STT):
 
-    def __init__(self, lang, audio):
+    def __init__(self, lang):
         """
         Model and scorer initialization for the specific language.
         """
         super().__init__()
-        self.audio = audio
         self.lang = lang or 'en'
         # Model creation
         model, scorer = self.download_model()
@@ -121,7 +120,7 @@ class PolyglotSTT(STT):
         if fs_orig != desired_sample_rate:
             LOG.info('Warning: original sample rate ({}) is different than {}hz. Resampling might produce erratic speech recognition.'.format(
                     fs_orig, desired_sample_rate))
-            fs_new, audio = self.convert_samplerate(self.audio, desired_sample_rate)
+            fs_new, audio = self.convert_samplerate(audio, desired_sample_rate)
         else:
             audio = np.frombuffer(fin.readframes(fin.getnframes()), np.int16)
         audio_length = fin.getnframes() * (1 / fs_orig)

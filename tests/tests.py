@@ -76,7 +76,7 @@ class TestGetSTT(unittest.TestCase):
         for file in os.listdir(TEST_PATH_EN):
             transcription = ' '.join(file.split('_')[:-1]).lower()
             path = ROOT_DIR+'/test_audio/en/'+file
-            stt = PolyglotSTT('en', path)
+            stt = PolyglotSTT('en')
             text = stt.execute(path)
             error = wer(transcription.strip(), text.strip())
             LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(transcription, text, error))
@@ -87,7 +87,7 @@ class TestGetSTT(unittest.TestCase):
         for file in os.listdir(TEST_PATH_FR):
             transcription = ' '.join(file.split('_')[:-1]).lower()
             path = ROOT_DIR + '/test_audio/fr/' + file
-            stt = PolyglotSTT('fr', path)
+            stt = PolyglotSTT('fr')
             text = stt.execute(path)
             result = transliteration(transcription, text, 'fr')
             LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(result[1], result[2], result[0]))
@@ -98,7 +98,7 @@ class TestGetSTT(unittest.TestCase):
         for file in os.listdir(TEST_PATH_ES):
             transcription = ' '.join(file.split('_')[:-1]).lower()
             path = ROOT_DIR + '/test_audio/es/' + file
-            stt = PolyglotSTT('es', path)
+            stt = PolyglotSTT('es')
             text = stt.execute(path)
             result = transliteration(transcription, text, 'es')
             LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(result[1], result[2], result[0]))
@@ -109,7 +109,7 @@ class TestGetSTT(unittest.TestCase):
         for file in os.listdir(TEST_PATH_PL):
             transcription = ' '.join(file.split('_')[:-1]).lower()
             path = ROOT_DIR + '/test_audio/pl/' + file
-            stt = PolyglotSTT('pl', path)
+            stt = PolyglotSTT('pl')
             text = stt.execute(path)
             result = transliteration(transcription, text, 'pl')
             LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(result[1], result[2], result[0]))
