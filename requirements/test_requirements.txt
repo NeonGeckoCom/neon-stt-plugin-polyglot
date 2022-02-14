@@ -2,4 +2,4 @@ neon-speech
 pytest
 pytest-timeout
 jiwer~=2.3.0
-neon_sftp @ git+https://github.com/neon-sftp@initial_structure
+neon_sftp

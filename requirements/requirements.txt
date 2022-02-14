@@ -6,3 +6,4 @@ neon_utils
 wave
 pyxdg~=0.27
 neon_sftp
+pyaudio

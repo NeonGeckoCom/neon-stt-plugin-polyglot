@@ -4,9 +4,6 @@ STT Plugin for Polyglot DeepSpeech stt models streaming Speech-to-Text.
 # Tkinter installation if python version < 3.1
 sudo apt-get install python3-tk-dbg
 
-# Neon-sftp installation:
-neon_sftp @ git+https://github.com/neon-sftp@initial_structure
-
 # Configuration:
 # TODO: Specify any optional or required configuration values
 ```yaml

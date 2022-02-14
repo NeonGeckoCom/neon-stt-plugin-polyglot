@@ -59,9 +59,9 @@ setup(
     long_description_content_type="text/markdown",
     url='https://github.com/NeonGeckoCom/neon-stt-plugin-polyglot',
     author='Neongecko',
+    license='BSD-3.0',
+    packages=find_packages(),
     author_email='mariia@neon.ai',
-    license='NeonAI License v1.0',
-    packages=['neon_stt_plugin_polyglot'],
     install_requires=get_requirements("requirements.txt"),
     zip_safe=True,
     classifiers=[
