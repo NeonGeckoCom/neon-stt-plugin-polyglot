@@ -1,6 +1,6 @@
 deepspeech>=0.9.3
 tensorflow~=2.3.0
-ovos-plugin-manager>=0.0.1a7
+ovos-plugin-manager==0.0.2
 ovos-utils==0.0.12
 numpy
 neon_speech
