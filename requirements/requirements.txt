@@ -1,5 +1,6 @@
 deepspeech>=0.9.3
 tensorflow~=2.3.0
+ovos-utils==0.0.8
 numpy
 neon_speech
 neon_utils
