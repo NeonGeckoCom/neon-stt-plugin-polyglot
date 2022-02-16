@@ -21,7 +21,7 @@
 import sys
 import os
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+# sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
 from neon_stt_plugin_polyglot import PolyglotSTT
 from ovos_utils.log import LOG
