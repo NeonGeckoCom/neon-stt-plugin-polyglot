@@ -27,6 +27,8 @@ jobs:
       matrix:
         python-version: [ 3.6, 3.7, 3.8]
     runs-on: ubuntu-latest
+    env:
+      SFTP_CONFIG: ${{ secrets.SFTP_CONFIG }}
     steps:
       - uses: actions/checkout@v2
       - name: Set up python ${{ matrix.python-version }}
@@ -40,7 +42,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements/requirements.txt
           pip install -r requirements/test_requirements.txt
-
+      - name: Get Credentials
+        run: |
+          mkdir -p ~/.local/share/neon
+          echo $SFTP_CONFIG > ~/.local/share/neon/credentials.json
       - name: Test Deepspeech STT
         run: |
           pytest tests/test_stt.py --junitxml=tests/stt-test-results.xml
