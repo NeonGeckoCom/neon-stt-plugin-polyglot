@@ -78,7 +78,7 @@ class PolyglotSTT(STT):
             os.makedirs(folder)
             LOG.info(f"Downloading model for polyglot ...")
             LOG.info("this might take a while")
-            with open(os.environ.get('SFTP_CREDS_PATH', '../sftp_config.json')) as f:
+            with open(os.environ.get('SFTP_CREDS_PATH', '/tests/sftp_config.json')) as f:
                 sftp_creds = json.load(f)
                 NeonSFTPConnector.connector = NeonSFTPConnector(**sftp_creds)
             get_graph = '/polyglot/'+self.lang+'/output_graph.pbmm'
