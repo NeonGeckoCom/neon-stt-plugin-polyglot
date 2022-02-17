@@ -28,7 +28,6 @@ from ovos_utils.log import LOG
 import unittest
 from jiwer import wer
 import re
-from neon_utils import parse_utils
 
 ROOT_DIR = os.path.dirname(os.path.realpath(__file__))
 TEST_PATH_EN = os.path.join(ROOT_DIR, "test_audio/en")
@@ -92,7 +91,7 @@ class TestGetSTT(unittest.TestCase):
             path = ROOT_DIR + '/test_audio/fr/' + file
             stt = PolyglotSTT('fr')
             text = stt.execute(path)
-            result = parse_utils.transliteration(transcription, text, 'fr')
+            result = transliteration(transcription, text, 'fr')
             LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(result[1], result[2], result[0]))
             # self.assertTrue(result[0] < 0.6)
 
