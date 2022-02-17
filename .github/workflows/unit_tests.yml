@@ -39,6 +39,7 @@ jobs:
         run: |
           sudo apt update
           sudo apt install ffmpeg portaudio19-dev python3-pyaudio
+          sudo apt install sox
           python -m pip install --upgrade pip
           pip install -r requirements/requirements.txt
           pip install -r requirements/test_requirements.txt
