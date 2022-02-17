@@ -26,7 +26,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 from neon_stt_plugin_polyglot import PolyglotSTT
 from ovos_utils.log import LOG
 import unittest
-from jiwer import wer
+from jiwer import wer, cer
 import re
 
 ROOT_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -39,7 +39,7 @@ def transliteration(transcription, text, lang):
     transliterated = []
     translit_dict = {}
     if lang == 'pl':
-        translit_dict = {'a': ['ą'], 'c': ['ć'], 'e': ['ę'], 'n': ['ń'], 'o': ['ó'], 's': ['ś'], 'z': ['ź', 'ż']}
+        translit_dict = {'a': ['ą'], 'c': ['ć'], 'e': ['ę'], 'n': ['ń'], 'o': ['ó'], 's': ['ś'], 'z': ['ź', 'ż'], 'l': ['ł']}
     if lang == 'fr':
         translit_dict = {'c': ['ç'], 'e': ['é', 'ê', 'è', 'ë'], 'a': ['â', 'à'], 'i': ['î', 'ì', 'ï'],
                          'o': ['ô', 'ò'], 'u': ['û', 'ù', 'ü']}
@@ -61,61 +61,76 @@ def transliteration(transcription, text, lang):
             else:
                     transliterated.append(letter)
         translit_str = ''.join(transliterated)
-        if translit_str != '':
-            error = wer(translit_str.strip(), text.strip())
-            return error, translit_str, text
-        else:
-            error = wer(transcription.strip(), text.strip())
-            return error, transcription, text
+        return translit_str
     else:
-        error = wer(transcription.strip(), text.strip())
-        return error, transcription, text
+        return text
 
 class TestGetSTT(unittest.TestCase):
 
     def test_en_stt(self):
         LOG.info("ENGLISH STT MODEL")
+        ground_truth = []
+        hypothesis = []
         for file in os.listdir(TEST_PATH_EN):
             transcription = ' '.join(file.split('_')[:-1]).lower()
+            ground_truth.append(transcription)
             path = ROOT_DIR+'/test_audio/en/'+file
             stt = PolyglotSTT('en')
             text = stt.execute(path)
-            error = wer(transcription.strip(), text.strip())
-            LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(transcription, text, error))
-            # self.assertTrue(error < 0.6)
+            hypothesis.append(text)
+        error = cer(ground_truth, hypothesis)
+        LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
+        self.assertTrue(error < 0.3)
 
     def test_fr_stt(self):
         LOG.info("FRENCH STT MODEL")
+        ground_truth = []
+        hypothesis = []
         for file in os.listdir(TEST_PATH_FR):
             transcription = ' '.join(file.split('_')[:-1]).lower()
+            ground_truth.append(transcription)
             path = ROOT_DIR + '/test_audio/fr/' + file
             stt = PolyglotSTT('fr')
             text = stt.execute(path)
-            result = transliteration(transcription, text, 'fr')
-            LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(result[1], result[2], result[0]))
-            # self.assertTrue(result[0] < 0.6)
+            translit = transliteration(transcription, text, 'fr')
+            hypothesis.append(translit)
+        error = cer(ground_truth, hypothesis)
+        LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
+        self.assertTrue(error < 0.3)
 
     def test_es_stt(self):
         LOG.info("SPANISH STT MODEL")
+        ground_truth = []
+        hypothesis = []
         for file in os.listdir(TEST_PATH_ES):
             transcription = ' '.join(file.split('_')[:-1]).lower()
+            ground_truth.append(transcription)
             path = ROOT_DIR + '/test_audio/es/' + file
             stt = PolyglotSTT('es')
             text = stt.execute(path)
-            result = transliteration(transcription, text, 'es')
-            LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(result[1], result[2], result[0]))
-            # self.assertTrue(result[0] < 0.6)
+            translit = transliteration(transcription, text, 'es')
+            hypothesis.append(translit)
+        print(ground_truth)
+        print(hypothesis)
+        error = cer(ground_truth, hypothesis)
+        LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
+        self.assertTrue(error < 0.3)
 
     def test_pl_stt(self):
         LOG.info("POLISH STT MODEL")
+        ground_truth = []
+        hypothesis = []
         for file in os.listdir(TEST_PATH_PL):
             transcription = ' '.join(file.split('_')[:-1]).lower()
+            ground_truth.append(transcription)
             path = ROOT_DIR + '/test_audio/pl/' + file
             stt = PolyglotSTT('pl')
             text = stt.execute(path)
-            result = transliteration(transcription, text, 'pl')
-            LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(result[1], result[2], result[0]))
-            # self.assertTrue(result[0] < 0.6)
+            translit = transliteration(transcription, text, 'pl')
+            hypothesis.append(translit)
+        error = cer(ground_truth, hypothesis)
+        LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
+        self.assertTrue(error < 0.3)
 
 if __name__ == '__main__':
     unittest.main()
