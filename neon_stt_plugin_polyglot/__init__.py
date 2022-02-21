@@ -81,8 +81,8 @@ class PolyglotSTT(STT):
             with open(os.path.expanduser(os.environ.get('SFTP_CREDS_PATH', '~/.local/share/neon/credentials.json'))) as f:
                 sftp_creds = json.load(f)
                 NeonSFTPConnector.connector = NeonSFTPConnector(**sftp_creds)
-            get_graph = '~/.local/share/neon/'+self.lang+'/output_graph.pbmm'
-            get_scorer = '~/.local/share/neon/'+self.lang+'/kenlm.scorer'
+            get_graph = '/polyglot/'+self.lang+'/output_graph.pbmm'
+            get_scorer = '/polyglot/'+self.lang+'/kenlm.scorer'
             NeonSFTPConnector.connector.get_file(get_from=get_graph, save_to=graph)
             LOG.info(f"Model downloaded to {folder}")
             NeonSFTPConnector.connector.get_file(get_from=get_scorer, save_to=scorer)
