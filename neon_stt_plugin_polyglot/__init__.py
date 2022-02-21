@@ -55,7 +55,6 @@ class PolyglotSTT(STT):
         self.lang = lang or 'en'
         # Model creation
         model, scorer = self.download_model()
-        print(model, scorer)
         model = deepspeech.Model(model)
         #  Adding scorer
         model.enableExternalScorer(scorer)
@@ -72,8 +71,8 @@ class PolyglotSTT(STT):
         Creating a language folder in 'polyglot_models' folder
         '''
         folder = join('~/.local/share/neon/')+self.lang
-        graph = folder + '/output_graph.pbmm'
-        scorer = folder + '/kenlm.scorer'
+        graph = os.path.expanduser(os.environ.get('GRAPH_PATH', folder + '/output_graph.pbmm'))
+        scorer = os.path.expanduser(os.environ.get('SCORER_PATH', folder + '/kenlm.scorer'))
         if not exists(folder):
             os.makedirs(folder)
             LOG.info(f"Downloading model for polyglot ...")
@@ -84,9 +83,9 @@ class PolyglotSTT(STT):
             get_graph = '/polyglot/'+self.lang+'/output_graph.pbmm'
             get_scorer = '/polyglot/'+self.lang+'/kenlm.scorer'
             NeonSFTPConnector.connector.get_file(get_from=get_graph, save_to=graph)
-            LOG.info(f"Model downloaded to {folder}")
+            LOG.info(f"Model downloaded to {graph}")
             NeonSFTPConnector.connector.get_file(get_from=get_scorer, save_to=scorer)
-            LOG.info(f"Scorer downloaded to {folder}")
+            LOG.info(f"Scorer downloaded to {scorer}")
             model_path = graph
             scorer_file_path = scorer
         else:
