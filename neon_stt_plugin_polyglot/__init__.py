@@ -70,10 +70,10 @@ class PolyglotSTT(STT):
         Creating a folder  'polyglot_models' in xdg_data_home
         Creating a language folder in 'polyglot_models' folder
         '''
-        folder = join('~/.local/share/neon/')+self.lang
+        folder = os.path.expanduser(join('~/.local/share/neon/')+self.lang)
         graph = os.path.expanduser(os.environ.get('GRAPH_PATH', folder + '/output_graph.pbmm'))
         scorer = os.path.expanduser(os.environ.get('SCORER_PATH', folder + '/kenlm.scorer'))
-        if not exists(folder):
+        if not exists(graph):
             os.makedirs(folder)
             LOG.info(f"Downloading model for polyglot ...")
             LOG.info("this might take a while")
