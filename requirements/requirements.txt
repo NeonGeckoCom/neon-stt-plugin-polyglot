@@ -7,6 +7,6 @@ numpy
 neon_speech
 neon_utils
 wave
-ovos-utils.xdg_utils
+pyxdg~=0.27
 neon_sftp
 pyaudio
