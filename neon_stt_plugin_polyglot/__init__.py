@@ -71,7 +71,7 @@ class PolyglotSTT(STT):
         Creating a folder  'polyglot_models' in xdg_data_home
         Creating a language folder in 'polyglot_models' folder
         '''
-        folder = join('polyglot_models/')+self.lang
+        folder = join('~/.local/share/neon/')+self.lang
         graph = folder + '/output_graph.pbmm'
         scorer = folder + '/kenlm.scorer'
         if not exists(folder):
@@ -81,8 +81,8 @@ class PolyglotSTT(STT):
             with open(os.path.expanduser(os.environ.get('SFTP_CREDS_PATH', '~/.local/share/neon/credentials.json'))) as f:
                 sftp_creds = json.load(f)
                 NeonSFTPConnector.connector = NeonSFTPConnector(**sftp_creds)
-            get_graph = '/polyglot/'+self.lang+'/output_graph.pbmm'
-            get_scorer = '/polyglot/'+self.lang+'/kenlm.scorer'
+            get_graph = '~/.local/share/neon/'+self.lang+'/output_graph.pbmm'
+            get_scorer = '~/.local/share/neon/'+self.lang+'/kenlm.scorer'
             NeonSFTPConnector.connector.get_file(get_from=get_graph, save_to=graph)
             LOG.info(f"Model downloaded to {folder}")
             NeonSFTPConnector.connector.get_file(get_from=get_scorer, save_to=scorer)
