@@ -7,5 +7,5 @@ numpy
 neon_speech
 neon_utils==0.15
 wave
-neon_sftp
+huggingface-hub
 pyaudio
