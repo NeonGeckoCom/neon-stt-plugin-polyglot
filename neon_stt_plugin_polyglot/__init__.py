@@ -36,7 +36,7 @@ import shlex
 import subprocess
 import wave
 from timeit import default_timer as timer
-from neon_sftp import NeonSFTPConnector
+from huggingface_hub import hf_hub_download
 import json
 
 try:
@@ -66,7 +66,7 @@ class PolyglotSTT(STT):
     def download_model(self):
         '''
         Downloading model and scorer for the specific language
-        from server using NeonSFTPConnector plugin.
+        from Huggingface.
         Creating a folder  'polyglot_models' in xdg_data_home
         Creating a language folder in 'polyglot_models' folder
         '''
