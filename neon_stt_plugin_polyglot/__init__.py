@@ -74,7 +74,7 @@ class PolyglotSTT(STT):
         graph = os.path.expanduser(os.environ.get('GRAPH_PATH', join('~/.local/share/neon/')+self.lang + '/output_graph.pbmm'))
         scorer = os.path.expanduser(os.environ.get('SCORER_PATH', join('~/.local/share/neon/')+self.lang + '/kenlm.scorer'))
         if not exists(graph):
-            os.makedirs(join('~/.local/share/neon/')+self.lang)
+            os.makedirs(os.path.expanduser(join('~/.local/share/neon/')+self.lang))
             LOG.info(f"Downloading model for polyglot ...")
             LOG.info("this might take a while")
             with open(os.path.expanduser(os.environ.get('SFTP_CREDS_PATH', '~/.local/share/neon/credentials.json'))) as f:
