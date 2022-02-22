@@ -1,3 +1,4 @@
 neon-speech
 pytest
 pytest-timeout
+jiwer~=2.3.0
