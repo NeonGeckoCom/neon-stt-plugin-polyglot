@@ -25,6 +25,7 @@
 # LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE,  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+import shutil
 
 import deepspeech
 import numpy as np
@@ -71,11 +72,16 @@ class PolyglotSTT(STT):
         Creating a language folder in 'polyglot_models' folder
         '''
         repo_id = f"NeonBohdan/stt-polyglot-{self.lang}"
-        model_path = hf_hub_download(repo_id, filename="output_graph.pbmm")
+        download_path = hf_hub_download(repo_id, filename="output_graph.pbmm")
         scorer_file_path = hf_hub_download(repo_id, filename="kenlm.scorer")
-
+        # Model path must include the `pbmm` file extension
+        # TODO: Consider renaming files and moving to ~/.local/share/neon
+        model_path = f"{download_path}.pbmm"
+        if not os.path.isfile(model_path) or \
+                os.path.getmtime(model_path) != os.path.getmtime(download_path):
+            LOG.info("Getting new model from huggingface")
+            shutil.copy2(download_path, model_path)
         return model_path, scorer_file_path
-
 
     def convert_samplerate(self, audio, desired_sample_rate):
         """
