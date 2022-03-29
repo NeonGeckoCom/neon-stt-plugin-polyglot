@@ -25,6 +25,7 @@
 # LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE,  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+import shutil
 
 import deepspeech
 import numpy as np
@@ -36,7 +37,7 @@ import shlex
 import subprocess
 import wave
 from timeit import default_timer as timer
-from neon_sftp import NeonSFTPConnector
+from huggingface_hub import hf_hub_download
 import json
 
 try:
@@ -66,33 +67,21 @@ class PolyglotSTT(STT):
     def download_model(self):
         '''
         Downloading model and scorer for the specific language
-        from server using NeonSFTPConnector plugin.
+        from Huggingface.
         Creating a folder  'polyglot_models' in xdg_data_home
         Creating a language folder in 'polyglot_models' folder
         '''
-        folder = os.path.expanduser(join('~/.local/share/neon/')+self.lang)
-        graph = os.path.expanduser(os.environ.get('GRAPH_PATH', folder + '/output_graph.pbmm'))
-        scorer = os.path.expanduser(os.environ.get('SCORER_PATH', folder + '/kenlm.scorer'))
-        if not exists(graph):
-            os.makedirs(os.environ.get('FOLDER_PATH', os.path.expanduser(folder)))
-            LOG.info(f"Downloading model for polyglot ...")
-            LOG.info("this might take a while")
-            with open(os.path.expanduser(os.environ.get('SFTP_CREDS_PATH', '~/.local/share/neon/credentials.json'))) as f:
-                sftp_creds = json.load(f)
-                NeonSFTPConnector.connector = NeonSFTPConnector(**sftp_creds)
-            get_graph = '/polyglot/'+self.lang+'/output_graph.pbmm'
-            get_scorer = '/polyglot/'+self.lang+'/kenlm.scorer'
-            NeonSFTPConnector.connector.get_file(get_from=get_graph, save_to=graph)
-            LOG.info(f"Model downloaded to {graph}")
-            NeonSFTPConnector.connector.get_file(get_from=get_scorer, save_to=scorer)
-            LOG.info(f"Scorer downloaded to {scorer}")
-            model_path = graph
-            scorer_file_path = scorer
-        else:
-            model_path = graph
-            scorer_file_path = scorer
+        repo_id = f"NeonBohdan/stt-polyglot-{self.lang}"
+        download_path = hf_hub_download(repo_id, filename="output_graph.pbmm")
+        scorer_file_path = hf_hub_download(repo_id, filename="kenlm.scorer")
+        # Model path must include the `pbmm` file extension
+        # TODO: Consider renaming files and moving to ~/.local/share/neon
+        model_path = f"{download_path}.pbmm"
+        if not os.path.isfile(model_path) or \
+                os.path.getmtime(model_path) != os.path.getmtime(download_path):
+            LOG.info("Getting new model from huggingface")
+            shutil.copy2(download_path, model_path)
         return model_path, scorer_file_path
-
 
     def convert_samplerate(self, audio, desired_sample_rate):
         """
