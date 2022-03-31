@@ -5,10 +5,9 @@ STT Plugin for Polyglot DeepSpeech stt models streaming Speech-to-Text.
 sudo apt-get install python3-tk-dbg
 
 # Configuration:
-# TODO: Specify any optional or required configuration values
 ```yaml
 stt:
-    module: neon-stt-plugin-polyglot  
-    neon_stt_plugin_polyglot : {}  # TODO: Any module config
+    module: polyglot  
+    polyglot : {}
 
 ```
