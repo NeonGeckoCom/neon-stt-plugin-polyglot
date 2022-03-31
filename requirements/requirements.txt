@@ -5,7 +5,7 @@ ovos-plugin-manager~=0.0.2
 ovos-utils~=0.0.12
 numpy
 neon_speech
-neon_utils==0.15
+neon_utils~=0.15
 wave
 huggingface-hub
 pyaudio
