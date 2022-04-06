@@ -1,3 +1,4 @@
+dataclasses
 deepspeech>=0.9.3
 json-database~=0.6
 ovos-plugin-manager~=0.0.2
