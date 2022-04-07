@@ -1,6 +1,5 @@
 deepspeech>=0.9.3
 tensorflow>=2.3.0
-json-database~=0.6
 ovos-plugin-manager~=0.0.2
 ovos-utils~=0.0.12
 numpy
@@ -8,4 +7,3 @@ neon_speech
 neon_utils~=0.15
 wave
 huggingface-hub
-pyaudio
