@@ -65,9 +65,9 @@ class TestGetSTT(unittest.TestCase):
             path = ROOT_DIR + '/test_audio/fr/' + file
             stt = CoquiSTT('fr')
             text = stt.execute(path)
-            translit = neon_utils.parse_utils.transliteration(transcription, text, 'fr')
-            hypothesis.append(translit)
-        error = cer(ground_truth, hypothesis)
+        #     translit = neon_utils.parse_utils.transliteration(transcription, text, 'fr')
+        #     hypothesis.append(translit)
+        # error = cer(ground_truth, hypothesis)
         # LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
         # self.assertTrue(error < 0.3)
 
@@ -81,11 +81,11 @@ class TestGetSTT(unittest.TestCase):
             path = ROOT_DIR + '/test_audio/es/' + file
             stt = CoquiSTT('es')
             text = stt.execute(path)
-            translit = neon_utils.parse_utils.transliteration(transcription, text, 'es')
-            hypothesis.append(translit)
-        print(ground_truth)
-        print(hypothesis)
-        error = cer(ground_truth, hypothesis)
+        #     translit = neon_utils.parse_utils.transliteration(transcription, text, 'es')
+        #     hypothesis.append(translit)
+        # print(ground_truth)
+        # print(hypothesis)
+        # error = cer(ground_truth, hypothesis)
         # LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
         # self.assertTrue(error < 0.3)
 
@@ -99,9 +99,9 @@ class TestGetSTT(unittest.TestCase):
             path = ROOT_DIR + '/test_audio/pl/' + file
             stt = CoquiSTT('pl')
             text = stt.execute(path)
-            translit = neon_utils.parse_utils.transliteration(transcription, text, 'pl')
-            hypothesis.append(translit)
-        error = cer(ground_truth, hypothesis)
+        #     translit = neon_utils.parse_utils.transliteration(transcription, text, 'pl')
+        #     hypothesis.append(translit)
+        # error = cer(ground_truth, hypothesis)
         # LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
         # self.assertTrue(error < 0.3)
 
