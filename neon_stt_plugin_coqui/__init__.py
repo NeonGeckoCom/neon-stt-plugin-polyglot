@@ -39,18 +39,13 @@ import wave
 from timeit import default_timer as timer
 from huggingface_hub import hf_hub_download
 import json
+from pipes import quote
 
-try:
-    from shhlex import quote
-except ImportError:
-    from pipes import quote
-
-import os
 import requests
 
 
 
-class PolyglotSTT(STT):
+class CoquiSTT(STT):
 
     def __init__(self, lang):
         """
@@ -101,7 +96,6 @@ class PolyglotSTT(STT):
         Creating a folder  'coqui_models' in xdg_data_home
         Creating a language folder in 'coqui_models' folder
         '''
-        print('HERE')
         credentials_path = os.path.dirname(os.path.abspath(__file__))+'/coqui_models.jsonl'
         with open(credentials_path, 'r') as json_file:
           json_list = list(json_file)
@@ -111,24 +105,6 @@ class PolyglotSTT(STT):
                 model, scorer = self.get_model(result['lang'], result['model_url'], result['scorer_url'])
                 return model, scorer
 
-    # def download_model(self):
-    #     '''
-    #     Downloading model and scorer for the specific language
-    #     from Huggingface.
-    #     Creating a folder  'polyglot_models' in xdg_data_home
-    #     Creating a language folder in 'polyglot_models' folder
-    #     '''
-    #     repo_id = f"NeonBohdan/stt-polyglot-{self.lang}"
-    #     download_path = hf_hub_download(repo_id, filename="output_graph.pbmm")
-    #     scorer_file_path = hf_hub_download(repo_id, filename="kenlm.scorer")
-    #     # Model path must include the `pbmm` file extension
-    #     # TODO: Consider renaming files and moving to ~/.local/share/neon
-    #     model_path = f"{download_path}.pbmm"
-    #     if not os.path.isfile(model_path) or \
-    #             os.path.getmtime(model_path) != os.path.getmtime(download_path):
-    #         LOG.info("Getting new model from huggingface")
-    #         shutil.copy2(download_path, model_path)
-    #     return model_path, scorer_file_path
 
     def convert_samplerate(self, audio, desired_sample_rate):
         """
