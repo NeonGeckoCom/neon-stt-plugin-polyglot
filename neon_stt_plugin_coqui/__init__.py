@@ -45,6 +45,10 @@ try:
 except ImportError:
     from pipes import quote
 
+import os
+import requests
+
+
 
 class PolyglotSTT(STT):
 
@@ -55,7 +59,7 @@ class PolyglotSTT(STT):
         super().__init__()
         self.lang = lang or 'en'
         # Model creation
-        model, scorer = self.download_model()
+        model, scorer = self.download_coqui_model()
         model = deepspeech.Model(model)
         #  Adding scorer
         model.enableExternalScorer(scorer)
@@ -64,24 +68,67 @@ class PolyglotSTT(STT):
         model.setBeamWidth(beam_width)
         self.model = model
 
-    def download_model(self):
+    def get_model(self, lang, model_url, scorer_url):
+        try:
+            if not os.path.isdir(os.path.expanduser("~/.local/share/neon/")):
+                os.makedirs(os.path.expanduser("~/.local/share/neon/"))
+            if model_url != None:
+                model_path = os.path.expanduser(f"~/.local/share/neon/coqui-{lang}-models.pbmm")
+
+            if scorer_url != None:
+                scorer_path = os.path.expanduser(f"~/.local/share/neon/coqui-{lang}-models.scorer")
+
+            if not os.path.isfile(model_path):
+                print(f"Downloading {model_url}")
+                model = requests.get(model_url, allow_redirects=True)
+                with open(model_path, "wb") as out:
+                    out.write(model.content)
+
+            if not os.path.isfile(scorer_path):
+                print(f"Downloading {scorer_url}")
+                scorer = requests.get(scorer_url, allow_redirects=True)
+                with open(scorer_path, "wb") as out:
+                    out.write(scorer.content)
+                print(f"Model Downloaded to {model_path}")
+            return model_path, scorer_path
+        except Exception as e:
+            print(f"Error getting deepspeech models! {e}")
+
+    def download_coqui_model(self):
         '''
         Downloading model and scorer for the specific language
-        from Huggingface.
-        Creating a folder  'polyglot_models' in xdg_data_home
-        Creating a language folder in 'polyglot_models' folder
+        from CoQui models web-page: https://coqui.ai/models.
+        Creating a folder  'coqui_models' in xdg_data_home
+        Creating a language folder in 'coqui_models' folder
         '''
-        repo_id = f"NeonBohdan/stt-polyglot-{self.lang}"
-        download_path = hf_hub_download(repo_id, filename="output_graph.pbmm")
-        scorer_file_path = hf_hub_download(repo_id, filename="kenlm.scorer")
-        # Model path must include the `pbmm` file extension
-        # TODO: Consider renaming files and moving to ~/.local/share/neon
-        model_path = f"{download_path}.pbmm"
-        if not os.path.isfile(model_path) or \
-                os.path.getmtime(model_path) != os.path.getmtime(download_path):
-            LOG.info("Getting new model from huggingface")
-            shutil.copy2(download_path, model_path)
-        return model_path, scorer_file_path
+        print('HERE')
+        credentials_path = os.path.dirname(os.path.abspath(__file__))+'/coqui_models.jsonl'
+        with open(credentials_path, 'r') as json_file:
+          json_list = list(json_file)
+          for json_str in json_list:
+            result = json.loads(json_str)
+            if self.lang == result['lang']:
+                model, scorer = self.get_model(result['lang'], result['model_url'], result['scorer_url'])
+                return model, scorer
+
+    # def download_model(self):
+    #     '''
+    #     Downloading model and scorer for the specific language
+    #     from Huggingface.
+    #     Creating a folder  'polyglot_models' in xdg_data_home
+    #     Creating a language folder in 'polyglot_models' folder
+    #     '''
+    #     repo_id = f"NeonBohdan/stt-polyglot-{self.lang}"
+    #     download_path = hf_hub_download(repo_id, filename="output_graph.pbmm")
+    #     scorer_file_path = hf_hub_download(repo_id, filename="kenlm.scorer")
+    #     # Model path must include the `pbmm` file extension
+    #     # TODO: Consider renaming files and moving to ~/.local/share/neon
+    #     model_path = f"{download_path}.pbmm"
+    #     if not os.path.isfile(model_path) or \
+    #             os.path.getmtime(model_path) != os.path.getmtime(download_path):
+    #         LOG.info("Getting new model from huggingface")
+    #         shutil.copy2(download_path, model_path)
+    #     return model_path, scorer_file_path
 
     def convert_samplerate(self, audio, desired_sample_rate):
         """

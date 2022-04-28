@@ -36,6 +36,8 @@ TEST_PATH_FR = os.path.join(ROOT_DIR, "test_audio/fr")
 TEST_PATH_ES = os.path.join(ROOT_DIR, "test_audio/es")
 TEST_PATH_PL = os.path.join(ROOT_DIR, "test_audio/pl")
 
+COQUI_CREDENTIALS = '/home/mariia/neon-stt-plugin-polyglot/tests/coqui_models.jsonl'
+
 def transliteration(transcription, text, lang):
     transliterated = []
     translit_dict = {}
@@ -65,8 +67,11 @@ def transliteration(transcription, text, lang):
         return translit_str
     else:
         return text
+        
+stt = PolyglotSTT('uk')
 
 class TestGetSTT(unittest.TestCase):
+
 
     def test_en_stt(self):
         LOG.info("ENGLISH STT MODEL")
@@ -93,7 +98,7 @@ class TestGetSTT(unittest.TestCase):
             path = ROOT_DIR + '/test_audio/fr/' + file
             stt = PolyglotSTT('fr')
             text = stt.execute(path)
-            translit = transliteration(transcription, text, 'fr')
+            translit = neon_utils.parse_utils.transliteration(transcription, text, 'fr')
             hypothesis.append(translit)
         error = cer(ground_truth, hypothesis)
         LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
@@ -129,6 +134,21 @@ class TestGetSTT(unittest.TestCase):
             text = stt.execute(path)
             translit = transliteration(transcription, text, 'pl')
             hypothesis.append(translit)
+        error = cer(ground_truth, hypothesis)
+        LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
+        self.assertTrue(error < 0.3)
+
+    def test_uk_stt(self):
+        LOG.info("UKRAINIAN STT MODEL")
+        ground_truth = []
+        hypothesis = []
+        for file in os.listdir(TEST_PATH_PL):
+            transcription = ' '.join(file.split('_')[:-1]).lower()
+            ground_truth.append(transcription)
+            path = ROOT_DIR + '/test_audio/pl/' + file
+            stt = PolyglotSTT('uk')
+            text = stt.execute(path)
+            hypothesis.append(text)
         error = cer(ground_truth, hypothesis)
         LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
         self.assertTrue(error < 0.3)
