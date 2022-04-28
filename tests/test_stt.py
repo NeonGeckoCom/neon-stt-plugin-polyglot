@@ -65,11 +65,12 @@ class TestGetSTT(unittest.TestCase):
             path = ROOT_DIR + '/test_audio/fr/' + file
             stt = CoquiSTT('fr')
             text = stt.execute(path)
-        #     translit = neon_utils.parse_utils.transliteration(transcription, text, 'fr')
-        #     hypothesis.append(translit)
-        # error = cer(ground_truth, hypothesis)
-        # LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
-        # self.assertTrue(error < 0.3)
+            translit = neon_utils.parse_utils.transliteration(transcription, text, 'fr')
+            print('translit: ', translit)
+            hypothesis.append(translit[0])
+        error = cer(ground_truth, hypothesis)
+        LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
+        self.assertTrue(error < 0.3)
 
     def test_es_stt(self):
         LOG.info("SPANISH STT MODEL")
@@ -81,13 +82,11 @@ class TestGetSTT(unittest.TestCase):
             path = ROOT_DIR + '/test_audio/es/' + file
             stt = CoquiSTT('es')
             text = stt.execute(path)
-        #     translit = neon_utils.parse_utils.transliteration(transcription, text, 'es')
-        #     hypothesis.append(translit)
-        # print(ground_truth)
-        # print(hypothesis)
-        # error = cer(ground_truth, hypothesis)
-        # LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
-        # self.assertTrue(error < 0.3)
+            translit = neon_utils.parse_utils.transliteration(transcription, text, 'es')
+            hypothesis.append(translit[0])
+        error = cer(ground_truth, hypothesis)
+        LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
+        self.assertTrue(error < 0.3)
 
     def test_pl_stt(self):
         LOG.info("POLISH STT MODEL")
@@ -99,11 +98,11 @@ class TestGetSTT(unittest.TestCase):
             path = ROOT_DIR + '/test_audio/pl/' + file
             stt = CoquiSTT('pl')
             text = stt.execute(path)
-        #     translit = neon_utils.parse_utils.transliteration(transcription, text, 'pl')
-        #     hypothesis.append(translit)
-        # error = cer(ground_truth, hypothesis)
-        # LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
-        # self.assertTrue(error < 0.3)
+            translit = neon_utils.parse_utils.transliteration(transcription, text, 'pl')
+            hypothesis.append(translit[0])
+        error = cer(ground_truth, hypothesis)
+        LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
+        self.assertTrue(error < 0.3)
 
     def test_uk_stt(self):
         LOG.info("UKRAINIAN STT MODEL")
@@ -115,7 +114,7 @@ class TestGetSTT(unittest.TestCase):
             path = ROOT_DIR + '/test_audio/pl/' + file
             stt = CoquiSTT('uk')
             text = stt.execute(path)
-            hypothesis.append(text)
+            # hypothesis.append(text)
         # error = cer(ground_truth, hypothesis)
         # LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
         # self.assertTrue(error < 0.3)
