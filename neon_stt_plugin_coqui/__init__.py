@@ -97,7 +97,7 @@ class CoquiSTT(STT):
         Creating a language folder in 'coqui_models' folder
         '''
         credentials_path = os.path.dirname(os.path.abspath(__file__))+'/coqui_models.jsonl'
-        with open(cCOQUI_CREDENTIALSredentials_path, 'r') as json_file:
+        with open(credentials_path, 'r') as json_file:
           json_list = list(json_file)
           for json_str in json_list:
             result = json.loads(json_str)
