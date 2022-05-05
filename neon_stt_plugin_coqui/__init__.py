@@ -48,6 +48,11 @@ class CoquiSTT(STT):
     def __init__(self, lang):
         """
         Model and scorer initialization for the specific language.
+
+        Parameters
+        ----------
+            lang : str -> ISO 639-1
+                language for recognising
         """
         super().__init__()
         self.lang = lang or 'en'
@@ -62,12 +67,24 @@ class CoquiSTT(STT):
         model.setBeamWidth(beam_width)
         self.model = model
 
-    def get_model(self, lang, model_url, scorer_url):
+    def get_model(self, model_url, scorer_url):
+        '''
+        Downloading model and scorer for the specific language
+        from CoQui models web-page: https://coqui.ai/models.
+        Creating model and a scorer files in ~/.local/share/neon/
+
+        Parameters:
+                    model_url (str): url to model downloading in .pbmm format
+                    scorer_url (str): url to scorer downloading in .scorer format
+
+        Returns:
+                    model, scorer (tuple): tuple that contains pathes to model and scorer
+        '''
         try:
             if not os.path.isdir(os.path.expanduser("~/.local/share/neon/")):
                 os.makedirs(os.path.expanduser("~/.local/share/neon/"))
             if model_url != None:
-                model_path = os.path.expanduser(f"~/.local/share/neon/coqui-{lang}-models.pbmm")
+                model_path = os.path.expanduser(f"~/.local/share/neon/coqui-{self.lang}-models.pbmm")
                 if not os.path.isfile(model_path):
                     LOG.info(f"Downloading {model_url}")
                     model = requests.get(model_url, allow_redirects=True)
@@ -76,7 +93,7 @@ class CoquiSTT(STT):
                     LOG.info(f"Model Downloaded to {model_path}")
 
             if scorer_url != None:
-                scorer_path = os.path.expanduser(f"~/.local/share/neon/coqui-{lang}-models.scorer")
+                scorer_path = os.path.expanduser(f"~/.local/share/neon/coqui-{self.lang}-models.scorer")
                 if not os.path.isfile(scorer_path):
                     LOG.info(f"Downloading {scorer_url}")
                     scorer = requests.get(scorer_url, allow_redirects=True)
@@ -92,20 +109,22 @@ class CoquiSTT(STT):
 
     def download_coqui_model(self):
         '''
-        Downloading model and scorer for the specific language
+        Parsing yaml file with model and scorer urls
+        Calls get_model() function for model and scorer downloading
         from CoQui models web-page: https://coqui.ai/models.
-        Creating a folder  'coqui_models' in xdg_data_home
-        Creating a language folder in 'coqui_models' folder
+
+        Returns:
+                    model, scorer (tuple): tuple that contains pathes to model and scorer
         '''
-        credentials_path = os.path.dirname(os.path.abspath(__file__))+'/coqui_models.json'
+        credentials_path = os.path.dirname(os.path.abspath(__file__))+'/coqui_models.yml'
         with open(credentials_path, 'r') as json_file:
           models_dict = yaml.load(json_file, Loader=yaml.FullLoader)
           if self.lang in models_dict.keys():
               if models_dict[self.lang]['scorer_url'] != "":
-                    model, scorer = self.get_model(self.lang, models_dict[self.lang]['model_url'],  models_dict[self.lang]['scorer_url'])
+                    model, scorer = self.get_model(models_dict[self.lang]['model_url'],  models_dict[self.lang]['scorer_url'])
                     return model, scorer
               else:
-                    model, scorer = self.get_model(self.lang, models_dict[self.lang]['model_url'],  None)
+                    model, scorer = self.get_model(models_dict[self.lang]['model_url'],  None)
                     return model, scorer
 
 
@@ -127,7 +146,17 @@ class CoquiSTT(STT):
         return desired_sample_rate, np.frombuffer(output, np.int16)
 
 
-    def execute(self, audio, language=None):
+    def execute(self, audio):
+        '''
+        Executes speach recognition
+        Reads audio from file path
+
+        Parameters:
+                    audio (str): path to audio file
+
+        Returns:
+                    text (str): trecognised text
+        '''
         desired_sample_rate = self.model.sampleRate()
         # reading audio file
         fin = wave.open(audio, 'rb')

@@ -35,8 +35,6 @@ TEST_PATH_FR = os.path.join(ROOT_DIR, "test_audio/fr")
 TEST_PATH_ES = os.path.join(ROOT_DIR, "test_audio/es")
 TEST_PATH_PL = os.path.join(ROOT_DIR, "test_audio/pl")
 
-COQUI_CREDENTIALS = '/home/mariia/neon-stt-plugin-polyglot/tests/coqui_models.jsonl'
-
 
 class TestGetSTT(unittest.TestCase):
 
