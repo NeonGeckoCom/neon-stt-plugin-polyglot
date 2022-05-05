@@ -57,7 +57,8 @@ class CoquiSTT(STT):
         model, scorer = self.download_coqui_model()
         model = deepspeech.Model(model)
         #  Adding scorer
-        model.enableExternalScorer(scorer)
+        if scorer != None:
+            model.enableExternalScorer(scorer)
         # setting beam width A larger beam width value generates better results at the cost of decoding time
         beam_width = 500
         model.setBeamWidth(beam_width)
@@ -69,22 +70,24 @@ class CoquiSTT(STT):
                 os.makedirs(os.path.expanduser("~/.local/share/neon/"))
             if model_url != None:
                 model_path = os.path.expanduser(f"~/.local/share/neon/coqui-{lang}-models.pbmm")
+                if not os.path.isfile(model_path):
+                    LOG.info(f"Downloading {model_url}")
+                    model = requests.get(model_url, allow_redirects=True)
+                    with open(model_path, "wb") as out:
+                        out.write(model.content)
+                    LOG.info(f"Model Downloaded to {model_path}")
 
             if scorer_url != None:
                 scorer_path = os.path.expanduser(f"~/.local/share/neon/coqui-{lang}-models.scorer")
-
-            if not os.path.isfile(model_path):
-                print(f"Downloading {model_url}")
-                model = requests.get(model_url, allow_redirects=True)
-                with open(model_path, "wb") as out:
-                    out.write(model.content)
-
-            if not os.path.isfile(scorer_path):
-                print(f"Downloading {scorer_url}")
-                scorer = requests.get(scorer_url, allow_redirects=True)
-                with open(scorer_path, "wb") as out:
-                    out.write(scorer.content)
-                print(f"Model Downloaded to {model_path}")
+                if not os.path.isfile(scorer_path):
+                    LOG.info(f"Downloading {scorer_url}")
+                    scorer = requests.get(scorer_url, allow_redirects=True)
+                    with open(scorer_path, "wb") as out:
+                        out.write(scorer.content)
+                    LOG.info(f"Scorer Downloaded to {scorer_path}")
+            else:
+                scorer_path = None
+                  
             return model_path, scorer_path
         except Exception as e:
             print(f"Error getting deepspeech models! {e}")
@@ -100,8 +103,13 @@ class CoquiSTT(STT):
         with open(credentials_path, 'r') as json_file:
           models_dict = json.load(json_file)
           if self.lang in models_dict.keys():
-                model, scorer = self.get_model(self.lang, models_dict[self.lang]['model_url'],  models_dict[self.lang]['scorer_url'])
-                return model, scorer
+              if models_dict[self.lang]['scorer_url'] != "":
+                    model, scorer = self.get_model(self.lang, models_dict[self.lang]['model_url'],  models_dict[self.lang]['scorer_url'])
+                    return model, scorer
+              else:
+                    model, scorer = self.get_model(self.lang, models_dict[self.lang]['model_url'],  None)
+                    return model, scorer
+
 
 
     def convert_samplerate(self, audio, desired_sample_rate):

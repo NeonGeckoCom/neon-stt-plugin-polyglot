@@ -94,11 +94,16 @@
   			"scorer_url": "https://coqui.gateway.scarf.sh/indonesian/itml/v0.1.0/Indonesian-digits-yesno.scorer"
   },
 
-  "fi": { "model_url": "https://coqui.gateway.scarf.sh/finnish/itml/v0.1.0/model.pbmm", 
-  			"scorer_url": "https://coqui.gateway.scarf.sh/finnish/itml/v0.1.0/Finnish-digits-yesno.scorer"
-  },
-
   "sl": { "model_url": "https://coqui.gateway.scarf.sh/slovenian/itml/v0.1.0/model.pbmm", 
   			"scorer_url": "https://coqui.gateway.scarf.sh/slovenian/itml/v0.1.0/Slovenian-digits-yesno.scorer"
+  },
+
+  "cy": { "model_url": "https://coqui.gateway.scarf.sh/welsh/techiaith/v21.03/model.pbmm", 
+          "scorer_url": "https://coqui.gateway.scarf.sh/welsh/techiaith/v21.03/techiaith_bangor_transcribe_21.03.scorer"
+  },
+
+  "cnh": { "model_url": "https://coqui.gateway.scarf.sh/hakha-chin/itml/v0.1.1/model.pbmm",
+          "scorer_url": ""
   }
+
 }
