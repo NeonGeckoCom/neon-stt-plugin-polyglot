@@ -96,13 +96,11 @@ class CoquiSTT(STT):
         Creating a folder  'coqui_models' in xdg_data_home
         Creating a language folder in 'coqui_models' folder
         '''
-        credentials_path = os.path.dirname(os.path.abspath(__file__))+'/coqui_models.jsonl'
+        credentials_path = os.path.dirname(os.path.abspath(__file__))+'/coqui_models.json'
         with open(credentials_path, 'r') as json_file:
-          json_list = list(json_file)
-          for json_str in json_list:
-            result = json.loads(json_str)
-            if self.lang == result['lang']:
-                model, scorer = self.get_model(result['lang'], result['model_url'], result['scorer_url'])
+          models_dict = json.load(json_file)
+          if self.lang in models_dict.keys():
+                model, scorer = self.get_model(self.lang, models_dict[self.lang]['model_url'],  models_dict[self.lang]['scorer_url'])
                 return model, scorer
 
 

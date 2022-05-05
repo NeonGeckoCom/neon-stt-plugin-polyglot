@@ -20,6 +20,8 @@
 # USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import sys
 import os
+import json
+
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
@@ -36,6 +38,7 @@ TEST_PATH_ES = os.path.join(ROOT_DIR, "test_audio/es")
 TEST_PATH_PL = os.path.join(ROOT_DIR, "test_audio/pl")
 
 COQUI_CREDENTIALS = '/home/mariia/neon-stt-plugin-polyglot/tests/coqui_models.jsonl'
+
 
 class TestGetSTT(unittest.TestCase):
 
