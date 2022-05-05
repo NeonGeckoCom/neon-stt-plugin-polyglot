@@ -20,8 +20,6 @@
 # USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import sys
 import os
-import json
-
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
@@ -50,84 +48,84 @@ class TestGetSTT(unittest.TestCase):
         print(text)
 
 
-    # def test_en_stt(self):
-    #     LOG.info("ENGLISH STT MODEL")
-    #     ground_truth = []
-    #     hypothesis = []
-    #     for file in os.listdir(TEST_PATH_EN):
-    #         transcription = ' '.join(file.split('_')[:-1]).lower()
-    #         ground_truth.append(transcription)
-    #         path = ROOT_DIR+'/test_audio/en/'+file
-    #         stt = CoquiSTT('en')
-    #         text = stt.execute(path)
-    #         hypothesis.append(text)
-    #     error = cer(ground_truth, hypothesis)
-    #     LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
-    #     self.assertTrue(error < 0.3)
+    def test_en_stt(self):
+        LOG.info("ENGLISH STT MODEL")
+        ground_truth = []
+        hypothesis = []
+        for file in os.listdir(TEST_PATH_EN):
+            transcription = ' '.join(file.split('_')[:-1]).lower()
+            ground_truth.append(transcription)
+            path = ROOT_DIR+'/test_audio/en/'+file
+            stt = CoquiSTT('en')
+            text = stt.execute(path)
+            hypothesis.append(text)
+        error = cer(ground_truth, hypothesis)
+        LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
+        self.assertTrue(error < 0.3)
 
-    # def test_fr_stt(self):
-    #     LOG.info("FRENCH STT MODEL")
-    #     ground_truth = []
-    #     hypothesis = []
-    #     for file in os.listdir(TEST_PATH_FR):
-    #         transcription = ' '.join(file.split('_')[:-1]).lower()
-    #         ground_truth.append(transcription)
-    #         path = ROOT_DIR + '/test_audio/fr/' + file
-    #         stt = CoquiSTT('fr')
-    #         text = stt.execute(path)
-    #         translit = neon_utils.parse_utils.transliteration(transcription, text, 'fr')
-    #         print('translit: ', translit)
-    #         hypothesis.append(translit[0])
-    #     error = cer(ground_truth, hypothesis)
-    #     LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
-    #     self.assertTrue(error < 0.3)
+    def test_fr_stt(self):
+        LOG.info("FRENCH STT MODEL")
+        ground_truth = []
+        hypothesis = []
+        for file in os.listdir(TEST_PATH_FR):
+            transcription = ' '.join(file.split('_')[:-1]).lower()
+            ground_truth.append(transcription)
+            path = ROOT_DIR + '/test_audio/fr/' + file
+            stt = CoquiSTT('fr')
+            text = stt.execute(path)
+            translit = neon_utils.parse_utils.transliteration(transcription, text, 'fr')
+            print('translit: ', translit)
+            hypothesis.append(translit[0])
+        error = cer(ground_truth, hypothesis)
+        LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
+        self.assertTrue(error < 0.3)
 
-    # def test_es_stt(self):
-    #     LOG.info("SPANISH STT MODEL")
-    #     ground_truth = []
-    #     hypothesis = []
-    #     for file in os.listdir(TEST_PATH_ES):
-    #         transcription = ' '.join(file.split('_')[:-1]).lower()
-    #         ground_truth.append(transcription)
-    #         path = ROOT_DIR + '/test_audio/es/' + file
-    #         stt = CoquiSTT('es')
-    #         text = stt.execute(path)
-    #         translit = neon_utils.parse_utils.transliteration(transcription, text, 'es')
-    #         hypothesis.append(translit[0])
-    #     error = cer(ground_truth, hypothesis)
-    #     LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
-    #     self.assertTrue(error < 0.3)
+    def test_es_stt(self):
+        LOG.info("SPANISH STT MODEL")
+        ground_truth = []
+        hypothesis = []
+        for file in os.listdir(TEST_PATH_ES):
+            transcription = ' '.join(file.split('_')[:-1]).lower()
+            ground_truth.append(transcription)
+            path = ROOT_DIR + '/test_audio/es/' + file
+            stt = CoquiSTT('es')
+            text = stt.execute(path)
+            translit = neon_utils.parse_utils.transliteration(transcription, text, 'es')
+            hypothesis.append(translit[0])
+        error = cer(ground_truth, hypothesis)
+        LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
+        self.assertTrue(error < 0.3)
 
-    # def test_pl_stt(self):
-    #     LOG.info("POLISH STT MODEL")
-    #     ground_truth = []
-    #     hypothesis = []
-    #     for file in os.listdir(TEST_PATH_PL):
-    #         transcription = ' '.join(file.split('_')[:-1]).lower()
-    #         ground_truth.append(transcription)
-    #         path = ROOT_DIR + '/test_audio/pl/' + file
-    #         stt = CoquiSTT('pl')
-    #         text = stt.execute(path)
-    #         translit = neon_utils.parse_utils.transliteration(transcription, text, 'pl')
-    #         hypothesis.append(translit[0])
-    #     error = cer(ground_truth, hypothesis)
-    #     LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
-    #     self.assertTrue(error < 0.3)
+    def test_pl_stt(self):
+        LOG.info("POLISH STT MODEL")
+        ground_truth = []
+        hypothesis = []
+        for file in os.listdir(TEST_PATH_PL):
+            transcription = ' '.join(file.split('_')[:-1]).lower()
+            ground_truth.append(transcription)
+            path = ROOT_DIR + '/test_audio/pl/' + file
+            stt = CoquiSTT('pl')
+            text = stt.execute(path)
+            translit = neon_utils.parse_utils.transliteration(transcription, text, 'pl')
+            hypothesis.append(translit[0])
+        error = cer(ground_truth, hypothesis)
+        LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
+        self.assertTrue(error < 0.3)
 
-    # def test_uk_stt(self):
-    #     LOG.info("UKRAINIAN STT MODEL")
-    #     ground_truth = []
-    #     hypothesis = []
-    #     for file in os.listdir(TEST_PATH_PL):
-    #         transcription = ' '.join(file.split('_')[:-1]).lower()
-    #         ground_truth.append(transcription)
-    #         path = ROOT_DIR + '/test_audio/pl/' + file
-    #         stt = CoquiSTT('uk')
-    #         text = stt.execute(path)
-    #         # hypothesis.append(text)
-    #     # error = cer(ground_truth, hypothesis)
-    #     # LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
-    #     # self.assertTrue(error < 0.3)
+    def test_uk_stt(self):
+        LOG.info("UKRAINIAN STT MODEL")
+        ground_truth = []
+        hypothesis = []
+        for file in os.listdir(TEST_PATH_PL):
+            transcription = ' '.join(file.split('_')[:-1]).lower()
+            ground_truth.append(transcription)
+            path = ROOT_DIR + '/test_audio/pl/' + file
+            stt = CoquiSTT('uk')
+            text = stt.execute(path)
+            # hypothesis.append(text)
+        # error = cer(ground_truth, hypothesis)
+        # LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
+        # self.assertTrue(error < 0.3)
 
 if __name__ == '__main__':
     unittest.main()

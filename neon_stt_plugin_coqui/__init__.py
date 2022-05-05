@@ -25,20 +25,18 @@
 # LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE,  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-import shutil
 
 import deepspeech
 import numpy as np
 from neon_speech.stt import STT
 import os
 from neon_utils.logger import LOG
-from os.path import join, exists
+import os.path
 import shlex
 import subprocess
 import wave
 from timeit import default_timer as timer
-from huggingface_hub import hf_hub_download
-import json
+import yaml
 from pipes import quote
 
 import requests
@@ -90,7 +88,7 @@ class CoquiSTT(STT):
                   
             return model_path, scorer_path
         except Exception as e:
-            print(f"Error getting deepspeech models! {e}")
+            LOG.info(f"Error getting deepspeech models! {e}")
 
     def download_coqui_model(self):
         '''
@@ -101,7 +99,7 @@ class CoquiSTT(STT):
         '''
         credentials_path = os.path.dirname(os.path.abspath(__file__))+'/coqui_models.json'
         with open(credentials_path, 'r') as json_file:
-          models_dict = json.load(json_file)
+          models_dict = yaml.load(json_file, Loader=yaml.FullLoader)
           if self.lang in models_dict.keys():
               if models_dict[self.lang]['scorer_url'] != "":
                     model, scorer = self.get_model(self.lang, models_dict[self.lang]['model_url'],  models_dict[self.lang]['scorer_url'])
