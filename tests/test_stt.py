@@ -41,10 +41,8 @@ class TestGetSTT(unittest.TestCase):
     def test_cnh_stt(self):
         LOG.info("STT MODEL without Scorer")
         stt = CoquiSTT('cnh')
-        audio = os.path.dirname(os.path.abspath(__file__))+'/test_audio/de/auf_Wiedersehen_female.wav'
+        audio = os.path.dirname(os.path.abspath(__file__))+'/test_audio/cnh/cnh_test.wav'
         text = stt.execute(audio)
-        print(text)
-
 
     def test_en_stt(self):
         LOG.info("ENGLISH STT MODEL")
