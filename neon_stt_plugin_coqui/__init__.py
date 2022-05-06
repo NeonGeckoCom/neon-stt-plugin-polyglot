@@ -146,13 +146,13 @@ class CoquiSTT(STT):
         return desired_sample_rate, np.frombuffer(output, np.int16)
 
 
-    def execute(self, audio):
+    def execute(self, audio, language=None):
         '''
         Executes speach recognition
         Reads audio from file path
 
         Parameters:
-                    audio (str): path to audio file
+                    audio (AudioData): path to audio file
 
         Returns:
                     text (str): trecognised text
