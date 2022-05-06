@@ -37,7 +37,7 @@ import wave
 from timeit import default_timer as timer
 import yaml
 from pipes import quote
-import deepspeech
+import stt
 
 import requests
 
@@ -58,7 +58,7 @@ class CoquiSTT(STT):
         self.lang = lang or 'en'
         # Model creation
         model, scorer = self.download_coqui_model()
-        model = deepspeech.Model(model)
+        model = stt.Model(model)
         #  Adding scorer
         if scorer != None:
             model.enableExternalScorer(scorer)
