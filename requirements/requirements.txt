@@ -7,4 +7,4 @@ neon_speech
 neon-utils~=0.15,>=0.15.1a18
 wave
 deepspeech
-yaml
+pyyaml
