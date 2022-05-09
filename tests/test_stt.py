@@ -35,6 +35,7 @@ TEST_PATH_EN = os.path.join(ROOT_DIR, "test_audio/en")
 TEST_PATH_FR = os.path.join(ROOT_DIR, "test_audio/fr")
 TEST_PATH_ES = os.path.join(ROOT_DIR, "test_audio/es")
 TEST_PATH_PL = os.path.join(ROOT_DIR, "test_audio/pl")
+TEST_PATH_UK = os.path.join(ROOT_DIR, "test_audio/uk")
 
 
 class TestGetSTT(unittest.TestCase):
@@ -148,10 +149,10 @@ class TestGetSTT(unittest.TestCase):
         LOG.info("UKRAINIAN STT MODEL")
         ground_truth = []
         hypothesis = []
-        for file in os.listdir(TEST_PATH_PL):
+        for file in os.listdir(TEST_PATH_UK):
             transcription = ' '.join(file.split('_')[:-1]).lower()
             ground_truth.append(transcription)
-            path = ROOT_DIR + '/test_audio/pl/' + file
+            path = ROOT_DIR + '/test_audio/uk/' + file
             stt = CoquiSTT('uk')
             LOG.info('Running inference.')
             inference_start = timer()
