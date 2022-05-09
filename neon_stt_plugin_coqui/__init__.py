@@ -34,10 +34,10 @@ import os.path
 import shlex
 import subprocess
 import wave
-from timeit import default_timer as timer
 import yaml
 from pipes import quote
 import deepspeech
+from speech_recognition import AudioData
 
 import requests
 
@@ -130,10 +130,19 @@ class CoquiSTT(STT):
 
 
     def convert_samplerate(self, audio, desired_sample_rate):
+    
         """
         Audio rate convertation if it doesn't satisfy model sample rate.
         Returns buffer output of audio in numpy array.
+
+        Parameters:
+                    audio (str): path to audio file
+                    desired_sample_rate: sample rate desired by coqui model
+
+        Returns:
+                    (numpy array): buffer output of audio
         """
+        
         sox_cmd = 'sox {} --type raw --bits 16 --channels 1 --rate {} --encoding signed-integer --endian little --compression 0.0 --no-dither - '.format(
             quote(audio), desired_sample_rate)
         try:
@@ -143,37 +152,58 @@ class CoquiSTT(STT):
         except OSError as e:
             raise OSError(e.errno,
                           'SoX not found, use {}hz files or install it: {}'.format(desired_sample_rate, e.strerror))
-        return desired_sample_rate, np.frombuffer(output, np.int16)
+        return np.frombuffer(output, np.int16)
 
 
-    def execute(self, audio, language=None):
-        '''
-        Executes speach recognition
-        Reads audio from file path
+    def get_audio_data(self, audio_path):
+
+        """
+        Constructs an AudioData instance with the same parameters
+        as the source and the specified frame_data.
+
+        Converts audio samplerate if the original 
+        samplerate doesn't satisfy model sample rate.
 
         Parameters:
-                    audio (AudioData): path to audio file
+                    audio_path (str): path to audio file
 
         Returns:
-                    text (str): trecognised text
-        '''
+                    audio_length (int): length of the input audio in sec
+                    audio_data (AudioData): audio data of the input audio file
+        """
+        
+        fin = wave.open(audio_path, 'rb')
+
         desired_sample_rate = self.model.sampleRate()
-        # reading audio file
-        fin = wave.open(audio, 'rb')
+        desired_sample_width = fin.getsampwidth()
+
+        # samplerate conversion
         fs_orig = fin.getframerate()
         if fs_orig != desired_sample_rate:
             LOG.info('Warning: original sample rate ({}) is different than {}hz. Resampling might produce erratic speech recognition.'.format(
                     fs_orig, desired_sample_rate))
-            fs_new, audio = self.convert_samplerate(audio, desired_sample_rate)
+            audio = self.convert_samplerate(audio_path, desired_sample_rate)
         else:
             audio = np.frombuffer(fin.readframes(fin.getnframes()), np.int16)
+        audio_data = AudioData(audio, desired_sample_rate,
+                               desired_sample_width)
+
+        #getting audio length
         audio_length = fin.getnframes() * (1 / fs_orig)
         fin.close()
-        LOG.info('Running inference.')
-        inference_start = timer()
-        # sphinx-doc: python_ref_inference_start
-        LOG.info("Transcription: "+str(self.model.stt(audio)))
-        # sphinx-doc: python_ref_inference_stop
-        inference_end = timer() - inference_start
-        LOG.info('Inference took %0.3fs for %0.3fs audio file.' % (inference_end, audio_length))
-        return str(self.model.stt(audio))
+
+        return audio_length, audio_data
+    
+    def execute(self, audio, language=None):
+        '''
+        Executes speach recognition
+
+        Parameters:
+                    audio (AudioData): AudioData of the input audio
+
+        Returns:
+                    text (str): trecognised text
+        '''
+
+        transcription = str(self.model.stt(audio.get_raw_data()))
+        return transcription
