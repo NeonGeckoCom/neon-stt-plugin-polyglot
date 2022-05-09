@@ -38,7 +38,7 @@ def get_requirements(requirements_filename: str):
     return requirements
 
 
-PLUGIN_ENTRY_POINT = 'polyglot = neon_stt_plugin_polyglot:PolyglotSTT'
+PLUGIN_ENTRY_POINT = 'coqui = neon_stt_plugin_coqui:CoquiSTT'
 
 with open("README.md", "r") as f:
     long_description = f.read()
@@ -52,7 +52,7 @@ with open("./version.py", "r", encoding="utf-8") as v:
                 version = line.split("'")[1]
 
 setup(
-    name='neon-stt-plugin-polyglot',
+    name='neon-stt-plugin-coqui',
     version=version,
     description='A Polyglot stt plugin for Neon',
     long_description=long_description,

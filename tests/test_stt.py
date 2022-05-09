@@ -23,61 +23,53 @@ import os
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
-from neon_stt_plugin_polyglot import PolyglotSTT
+from neon_stt_plugin_coqui import CoquiSTT
 from ovos_utils.log import LOG
 import neon_utils.parse_utils
 import unittest
 from jiwer import cer
-import re
+from timeit import default_timer as timer
 
 ROOT_DIR = os.path.dirname(os.path.realpath(__file__))
 TEST_PATH_EN = os.path.join(ROOT_DIR, "test_audio/en")
 TEST_PATH_FR = os.path.join(ROOT_DIR, "test_audio/fr")
 TEST_PATH_ES = os.path.join(ROOT_DIR, "test_audio/es")
 TEST_PATH_PL = os.path.join(ROOT_DIR, "test_audio/pl")
+TEST_PATH_UK = os.path.join(ROOT_DIR, "test_audio/uk")
 
-def transliteration(transcription, text, lang):
-    transliterated = []
-    translit_dict = {}
-    if lang == 'pl':
-        translit_dict = {'a': ['ą'], 'c': ['ć'], 'e': ['ę'], 'n': ['ń'], 'o': ['ó'], 's': ['ś'], 'z': ['ź', 'ż'], 'l': ['ł']}
-    if lang == 'fr':
-        translit_dict = {'c': ['ç'], 'e': ['é', 'ê', 'è', 'ë'], 'a': ['â', 'à'], 'i': ['î', 'ì', 'ï'],
-                         'o': ['ô', 'ò'], 'u': ['û', 'ù', 'ü']}
-    if lang == 'es':
-        translit_dict = {'a': ['á'], 'i': ['í'], 'e': ['é'], 'n': ['ñ'], 'o': ['ó'], 'u': ['ú', 'ü']}
-    if lang == 'de':
-        translit_dict = {'a': ['ä'], 's': ['ß'], 'o': ['ö'], 'u': ['ü']}
-    transcription = re.sub("`|'|-", "", transcription)
-    text = re.sub("`|'|-", "", text)
-    if len(transcription.strip()) == len(text.strip()):
-        for ind, letter in enumerate(transcription):
-            if letter in translit_dict.keys():
-                if letter != text[ind]:
-                    for l in translit_dict[letter]:
-                        if l == text[ind]:
-                                transliterated.append(l)
-                else:
-                        transliterated.append(letter)
-            else:
-                    transliterated.append(letter)
-        translit_str = ''.join(transliterated)
-        return translit_str
-    else:
-        return text
 
 class TestGetSTT(unittest.TestCase):
+
+    def test_cnh_stt(self):
+        LOG.info("STT MODEL without Scorer")
+        stt = CoquiSTT('cnh')
+        audio_path = os.path.dirname(os.path.abspath(__file__))+'/test_audio/cnh/cnh_test.wav'
+        LOG.info('Running inference.')
+        inference_start = timer()
+        audio_length, audio_data = stt.get_audio_data(audio_path)
+        text = stt.execute(audio_data)
+        LOG.info("Transcription: "+text)
+        inference_end = timer() - inference_start
+        LOG.info('Inference took %0.3fs for %0.3fs audio file.' % (inference_end, audio_length))
 
     def test_en_stt(self):
         LOG.info("ENGLISH STT MODEL")
         ground_truth = []
         hypothesis = []
         for file in os.listdir(TEST_PATH_EN):
+            # desired transcription
             transcription = ' '.join(file.split('_')[:-1]).lower()
             ground_truth.append(transcription)
             path = ROOT_DIR+'/test_audio/en/'+file
-            stt = PolyglotSTT('en')
-            text = stt.execute(path)
+            stt = CoquiSTT('en')
+            LOG.info('Running inference.')
+            inference_start = timer()
+            audio_length, audio_data = stt.get_audio_data(path)
+            text = stt.execute(audio_data)
+            LOG.info("Transcription: "+text)
+            inference_end = timer() - inference_start
+            LOG.info('Inference took %0.3fs for %0.3fs audio file.' % (inference_end, audio_length))
+            # model's output
             hypothesis.append(text)
         error = cer(ground_truth, hypothesis)
         LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
@@ -88,13 +80,23 @@ class TestGetSTT(unittest.TestCase):
         ground_truth = []
         hypothesis = []
         for file in os.listdir(TEST_PATH_FR):
+            # desired transcription
             transcription = ' '.join(file.split('_')[:-1]).lower()
             ground_truth.append(transcription)
             path = ROOT_DIR + '/test_audio/fr/' + file
-            stt = PolyglotSTT('fr')
-            text = stt.execute(path)
-            translit = transliteration(transcription, text, 'fr')
-            hypothesis.append(translit)
+            stt = CoquiSTT('fr')
+            LOG.info('Running inference.')
+            inference_start = timer()
+            audio_length, audio_data = stt.get_audio_data(path)
+            text = stt.execute(audio_data)
+            LOG.info("Transcription: "+text)
+            inference_end = timer() - inference_start
+            LOG.info('Inference took %0.3fs for %0.3fs audio file.' % (inference_end, audio_length))
+            # transliteration of desired transcription
+            translit = neon_utils.parse_utils.transliteration(transcription, text, 'fr')
+            print('translit: ', translit)
+            # model's output
+            hypothesis.append(translit[0])
         error = cer(ground_truth, hypothesis)
         LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
         self.assertTrue(error < 0.3)
@@ -107,12 +109,16 @@ class TestGetSTT(unittest.TestCase):
             transcription = ' '.join(file.split('_')[:-1]).lower()
             ground_truth.append(transcription)
             path = ROOT_DIR + '/test_audio/es/' + file
-            stt = PolyglotSTT('es')
-            text = stt.execute(path)
-            translit = transliteration(transcription, text, 'es')
-            hypothesis.append(translit)
-        print(ground_truth)
-        print(hypothesis)
+            stt = CoquiSTT('es')
+            LOG.info('Running inference.')
+            inference_start = timer()
+            audio_length, audio_data = stt.get_audio_data(path)
+            text = stt.execute(audio_data)
+            LOG.info("Transcription: "+text)
+            inference_end = timer() - inference_start
+            LOG.info('Inference took %0.3fs for %0.3fs audio file.' % (inference_end, audio_length))
+            translit = neon_utils.parse_utils.transliteration(transcription, text, 'es')
+            hypothesis.append(translit[0])
         error = cer(ground_truth, hypothesis)
         LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
         self.assertTrue(error < 0.3)
@@ -125,10 +131,37 @@ class TestGetSTT(unittest.TestCase):
             transcription = ' '.join(file.split('_')[:-1]).lower()
             ground_truth.append(transcription)
             path = ROOT_DIR + '/test_audio/pl/' + file
-            stt = PolyglotSTT('pl')
-            text = stt.execute(path)
-            translit = transliteration(transcription, text, 'pl')
-            hypothesis.append(translit)
+            stt = CoquiSTT('pl')
+            LOG.info('Running inference.')
+            inference_start = timer()
+            audio_length, audio_data = stt.get_audio_data(path)
+            text = stt.execute(audio_data)
+            LOG.info("Transcription: "+text)
+            inference_end = timer() - inference_start
+            LOG.info('Inference took %0.3fs for %0.3fs audio file.' % (inference_end, audio_length))
+            translit = neon_utils.parse_utils.transliteration(transcription, text, 'pl')
+            hypothesis.append(translit[0])
+        error = cer(ground_truth, hypothesis)
+        LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
+        self.assertTrue(error < 0.3)
+
+    def test_uk_stt(self):
+        LOG.info("UKRAINIAN STT MODEL")
+        ground_truth = []
+        hypothesis = []
+        for file in os.listdir(TEST_PATH_UK):
+            transcription = ' '.join(file.split('_')[:-1]).lower()
+            ground_truth.append(transcription)
+            path = ROOT_DIR + '/test_audio/uk/' + file
+            stt = CoquiSTT('uk')
+            LOG.info('Running inference.')
+            inference_start = timer()
+            audio_length, audio_data = stt.get_audio_data(path)
+            text = stt.execute(audio_data)
+            LOG.info("Transcription: "+text)
+            inference_end = timer() - inference_start
+            LOG.info('Inference took %0.3fs for %0.3fs audio file.' % (inference_end, audio_length))
+            hypothesis.append(text)
         error = cer(ground_truth, hypothesis)
         LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
         self.assertTrue(error < 0.3)
