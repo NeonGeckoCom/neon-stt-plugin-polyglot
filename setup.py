@@ -57,7 +57,7 @@ setup(
     description='A Polyglot stt plugin for Neon',
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url='https://github.com/NeonGeckoCom/neon-stt-plugin-coqui',
+    url='https://github.com/NeonGeckoCom/neon-stt-plugin-polyglot',
     author='Neongecko',
     license='BSD-3.0',
     packages=find_packages(),
