@@ -61,6 +61,7 @@ setup(
     author='Neongecko',
     license='BSD-3.0',
     packages=find_packages(),
+    package_data={"neon_stt_plugin_coqui": ["*.yml"]},
     author_email='mariia@neon.ai',
     install_requires=get_requirements("requirements.txt"),
     zip_safe=True,
