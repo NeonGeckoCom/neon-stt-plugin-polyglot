@@ -207,6 +207,9 @@ class CoquiSTT(STT):
                     text (str): recognized text
         '''
         # TODO: Handle models per-language
+        if audio.sample_rate != self.model.sampleRate():
+            LOG.warning(f"Audio SR ({audio.sample_rate}) "
+                        f"different from model: {self.model.sampleRate()}")
         transcription = str(self.model.stt(np.frombuffer(audio.get_raw_data(),
                                                          dtype=np.int16)))
         return transcription
