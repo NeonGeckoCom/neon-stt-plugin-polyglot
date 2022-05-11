@@ -56,6 +56,7 @@ class CoquiSTT(STT):
 
         # Model creation
         model, scorer = self.download_coqui_model()
+        LOG.info(f"Loading model file: {model}")
         model = deepspeech.Model(model)
         #  Adding scorer
         if scorer:
@@ -119,15 +120,16 @@ class CoquiSTT(STT):
         credentials_path = os.path.dirname(os.path.abspath(__file__))+'/coqui_models.yml'
         with open(credentials_path, 'r') as json_file:
             models_dict = yaml.load(json_file, Loader=yaml.FullLoader)
-            if self.lang in models_dict.keys():
-                if models_dict[self.lang]['scorer_url'] != "":
-                    model, scorer = \
-                        self.get_model(models_dict[self.lang]['model_url'],
-                                       models_dict[self.lang]['scorer_url'])
-                    return model, scorer
-                else:
-                    model, scorer = self.get_model(models_dict[self.lang]['model_url'],  None)
-                    return model, scorer
+        if self.lang not in models_dict.keys():
+            raise RuntimeError(f"{self.lang} is not supported")
+        if models_dict[self.lang]['scorer_url'] != "":
+            model, scorer = \
+                self.get_model(models_dict[self.lang]['model_url'],
+                               models_dict[self.lang]['scorer_url'])
+            return model, scorer
+        else:
+            model, scorer = self.get_model(models_dict[self.lang]['model_url'],  None)
+            return model, scorer
 
     def convert_samplerate(self, audio, desired_sample_rate):
     
