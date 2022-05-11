@@ -28,7 +28,7 @@
 
 
 import numpy as np
-from ovos_plugin_manager.templates.stt import STT
+from neon_speech.stt import STT
 from typing import Optional
 import os
 from neon_utils.logger import LOG
@@ -194,7 +194,7 @@ class CoquiSTT(STT):
 
         return audio_length, audio_data
     
-    def execute(self, audio, language=None):
+    def execute(self, audio: AudioData, language: str = None):
         '''
         Executes speach recognition
 
@@ -202,8 +202,9 @@ class CoquiSTT(STT):
                     audio (AudioData): AudioData of the input audio
                     language (str): language code associated with audio
         Returns:
-                    text (str): trecognised text
+                    text (str): recognized text
         '''
         # TODO: Handle models per-language
-        transcription = str(self.model.stt(audio.get_raw_data()))
+        transcription = str(self.model.stt(np.frombuffer(audio.get_raw_data(),
+                                                         dtype=np.int16)))
         return transcription
