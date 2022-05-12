@@ -60,7 +60,11 @@ class CoquiSTT(STT):
         model = deepspeech.Model(model)
         #  Adding scorer
         if scorer:
-            model.enableExternalScorer(scorer)
+            try:
+                model.enableExternalScorer(scorer)
+            except RuntimeError as e:
+                LOG.exception(e)
+                LOG.error(f"Not loading external scorer: {scorer}")
         # setting beam width A larger beam width value generates better results at the cost of decoding time
         beam_width = 500
         model.setBeamWidth(beam_width)
