@@ -62,6 +62,7 @@ class CoquiSTT(STT):
         except RuntimeError as e:
             LOG.exception(e)
             LOG.warning("Retrying model download")
+            os.remove(model)
             model, scorer = self.download_coqui_model()
             model = deepspeech.Model(model)
 
