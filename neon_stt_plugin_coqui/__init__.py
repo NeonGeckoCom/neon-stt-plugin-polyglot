@@ -56,8 +56,15 @@ class CoquiSTT(STT):
 
         # Model creation
         model, scorer = self.download_coqui_model()
-        LOG.info(f"Loading model file: {model}")
-        model = deepspeech.Model(model)
+        try:
+            LOG.info(f"Loading model file: {model}")
+            model = deepspeech.Model(model)
+        except RuntimeError as e:
+            LOG.exception(e)
+            LOG.warning("Retrying model download")
+            model, scorer = self.download_coqui_model()
+            model = deepspeech.Model(model)
+
         #  Adding scorer
         if scorer:
             try:
