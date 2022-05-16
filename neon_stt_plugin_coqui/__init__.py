@@ -66,7 +66,7 @@ class CoquiSTT(STT):
             model, scorer = self.download_coqui_model()
             model = deepspeech.Model(model)
 
-        #  Adding scorer
+        # Adding scorer
         if scorer:
             try:
                 model.enableExternalScorer(scorer)

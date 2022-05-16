@@ -145,26 +145,26 @@ class TestGetSTT(unittest.TestCase):
         LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
         self.assertTrue(error < 0.3)
 
-    # def test_uk_stt(self):
-    #     LOG.info("UKRAINIAN STT MODEL")
-    #     ground_truth = []
-    #     hypothesis = []
-    #     for file in os.listdir(TEST_PATH_UK):
-    #         transcription = ' '.join(file.split('_')[:-1]).lower()
-    #         ground_truth.append(transcription)
-    #         path = ROOT_DIR + '/test_audio/uk/' + file
-    #         stt = CoquiSTT('uk')
-    #         LOG.info('Running inference.')
-    #         inference_start = timer()
-    #         audio_length, audio_data = stt.get_audio_data(path)
-    #         text = stt.execute(audio_data)
-    #         LOG.info("Transcription: "+text)
-    #         inference_end = timer() - inference_start
-    #         LOG.info('Inference took %0.3fs for %0.3fs audio file.' % (inference_end, audio_length))
-    #         hypothesis.append(text)
-    #     error = cer(ground_truth, hypothesis)
-    #     LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
-    #     self.assertTrue(error < 0.3)
+    def test_uk_stt(self):
+        LOG.info("UKRAINIAN STT MODEL")
+        ground_truth = []
+        hypothesis = []
+        for file in os.listdir(TEST_PATH_UK):
+            transcription = ' '.join(file.split('_')[:-1]).lower()
+            ground_truth.append(transcription)
+            path = ROOT_DIR + '/test_audio/uk/' + file
+            stt = CoquiSTT('uk')
+            LOG.info('Running inference.')
+            inference_start = timer()
+            audio_length, audio_data = stt.get_audio_data(path)
+            text = stt.execute(audio_data)
+            LOG.info("Transcription: "+text)
+            inference_end = timer() - inference_start
+            LOG.info('Inference took %0.3fs for %0.3fs audio file.' % (inference_end, audio_length))
+            hypothesis.append(text)
+        error = cer(ground_truth, hypothesis)
+        LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
+        self.assertTrue(error < 0.3)
 
 
 if __name__ == '__main__':
