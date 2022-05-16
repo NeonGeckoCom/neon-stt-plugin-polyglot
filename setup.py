@@ -9,7 +9,7 @@
 # educational users, noncommercial enthusiasts, Public Benefit Corporations (and LLCs) and
 # Social Purpose Corporations (and LLCs). Developers can contact developers@neon.ai
 # For commercial licensing, distribution of derivative works or redistribution please contact licenses@neon.ai
-# Distributed on an "AS-IS” basis without warranties or conditions of any kind, either express or implied.
+# Distributed on an "AS IS” basis without warranties or conditions of any kind, either express or implied.
 # Trademarks of Neongecko: Neon AI(TM), Neon Assist (TM), Neon Communicator(TM), Klat(TM)
 # Authors: Guy Daniels, Daniel McKnight, Regina Bloomstine, Elon Gasper, Richard Leeds
 #
