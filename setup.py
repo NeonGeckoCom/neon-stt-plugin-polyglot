@@ -38,7 +38,7 @@ def get_requirements(requirements_filename: str):
     return requirements
 
 
-PLUGIN_ENTRY_POINT = 'coqui = neon_stt_plugin_coqui:CoquiSTT'
+PLUGIN_ENTRY_POINT = 'neon-stt-plugin-coqui = neon_stt_plugin_coqui:CoquiSTT'
 
 with open("README.md", "r") as f:
     long_description = f.read()
@@ -61,6 +61,7 @@ setup(
     author='Neongecko',
     license='BSD-3.0',
     packages=find_packages(),
+    package_data={"neon_stt_plugin_coqui": ["*.yml"]},
     author_email='mariia@neon.ai',
     install_requires=get_requirements("requirements.txt"),
     zip_safe=True,

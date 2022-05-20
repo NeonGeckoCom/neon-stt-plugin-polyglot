@@ -26,8 +26,10 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE,  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+
 import numpy as np
 from neon_speech.stt import STT
+from typing import Optional
 import os
 from neon_utils.logger import LOG
 import os.path
@@ -42,32 +44,41 @@ from speech_recognition import AudioData
 import requests
 
 
-
 class CoquiSTT(STT):
+    def __init__(self, config: dict = None):
+        if isinstance(config, str):
+            LOG.warning(f"Expected dict config but got: {config}")
+            config = {"lang": config}
+        config = config or dict()
+        super().__init__(config)
 
-    def __init__(self, lang):
-        """
-        Model and scorer initialization for the specific language.
+        self.lang = config.get('lang') or 'en'
 
-        Parameters
-        ----------
-            lang : str -> ISO 639-1
-                language for recognising
-        """
-        super().__init__()
-        self.lang = lang or 'en'
         # Model creation
         model, scorer = self.download_coqui_model()
-        model = deepspeech.Model(model)
-        #  Adding scorer
-        if scorer != None:
-            model.enableExternalScorer(scorer)
+        try:
+            LOG.info(f"Loading model file: {model}")
+            model = deepspeech.Model(model)
+        except RuntimeError as e:
+            LOG.exception(e)
+            LOG.warning("Retrying model download")
+            os.remove(model)
+            model, scorer = self.download_coqui_model()
+            model = deepspeech.Model(model)
+
+        # Adding scorer
+        if scorer:
+            try:
+                model.enableExternalScorer(scorer)
+            except RuntimeError as e:
+                LOG.exception(e)
+                LOG.error(f"Not loading external scorer: {scorer}")
         # setting beam width A larger beam width value generates better results at the cost of decoding time
         beam_width = 500
         model.setBeamWidth(beam_width)
         self.model = model
 
-    def get_model(self, model_url, scorer_url):
+    def get_model(self, model_url: str, scorer_url: Optional[str]):
         '''
         Downloading model and scorer for the specific language
         from CoQui models web-page: https://coqui.ai/models.
@@ -83,7 +94,7 @@ class CoquiSTT(STT):
         try:
             if not os.path.isdir(os.path.expanduser("~/.local/share/neon/")):
                 os.makedirs(os.path.expanduser("~/.local/share/neon/"))
-            if model_url != None:
+            if model_url:
                 model_path = os.path.expanduser(f"~/.local/share/neon/coqui-{self.lang}-models.pbmm")
                 if not os.path.isfile(model_path):
                     LOG.info(f"Downloading {model_url}")
@@ -91,8 +102,10 @@ class CoquiSTT(STT):
                     with open(model_path, "wb") as out:
                         out.write(model.content)
                     LOG.info(f"Model Downloaded to {model_path}")
+            else:
+                raise ValueError("Null model_url passed")
 
-            if scorer_url != None:
+            if scorer_url:
                 scorer_path = os.path.expanduser(f"~/.local/share/neon/coqui-{self.lang}-models.scorer")
                 if not os.path.isfile(scorer_path):
                     LOG.info(f"Downloading {scorer_url}")
@@ -118,16 +131,17 @@ class CoquiSTT(STT):
         '''
         credentials_path = os.path.dirname(os.path.abspath(__file__))+'/coqui_models.yml'
         with open(credentials_path, 'r') as json_file:
-          models_dict = yaml.load(json_file, Loader=yaml.FullLoader)
-          if self.lang in models_dict.keys():
-              if models_dict[self.lang]['scorer_url'] != "":
-                    model, scorer = self.get_model(models_dict[self.lang]['model_url'],  models_dict[self.lang]['scorer_url'])
-                    return model, scorer
-              else:
-                    model, scorer = self.get_model(models_dict[self.lang]['model_url'],  None)
-                    return model, scorer
-
-
+            models_dict = yaml.load(json_file, Loader=yaml.FullLoader)
+        if self.lang not in models_dict.keys():
+            raise RuntimeError(f"{self.lang} is not supported")
+        if models_dict[self.lang]['scorer_url'] != "":
+            model, scorer = \
+                self.get_model(models_dict[self.lang]['model_url'],
+                               models_dict[self.lang]['scorer_url'])
+            return model, scorer
+        else:
+            model, scorer = self.get_model(models_dict[self.lang]['model_url'],  None)
+            return model, scorer
 
     def convert_samplerate(self, audio, desired_sample_rate):
     
@@ -154,7 +168,6 @@ class CoquiSTT(STT):
                           'SoX not found, use {}hz files or install it: {}'.format(desired_sample_rate, e.strerror))
         return np.frombuffer(output, np.int16)
 
-
     def get_audio_data(self, audio_path):
 
         """
@@ -180,30 +193,35 @@ class CoquiSTT(STT):
         # samplerate conversion
         fs_orig = fin.getframerate()
         if fs_orig != desired_sample_rate:
-            LOG.info('Warning: original sample rate ({}) is different than {}hz. Resampling might produce erratic speech recognition.'.format(
-                    fs_orig, desired_sample_rate))
+            LOG.info(f'Warning: original sample rate ({fs_orig}) is different '
+                     f'than {desired_sample_rate}hz. Resampling might produce '
+                     f'erratic speech recognition.')
             audio = self.convert_samplerate(audio_path, desired_sample_rate)
         else:
             audio = np.frombuffer(fin.readframes(fin.getnframes()), np.int16)
         audio_data = AudioData(audio, desired_sample_rate,
                                desired_sample_width)
 
-        #getting audio length
+        # getting audio length
         audio_length = fin.getnframes() * (1 / fs_orig)
         fin.close()
 
         return audio_length, audio_data
     
-    def execute(self, audio, language=None):
+    def execute(self, audio: AudioData, language: str = None):
         '''
         Executes speach recognition
 
         Parameters:
                     audio (AudioData): AudioData of the input audio
-
+                    language (str): language code associated with audio
         Returns:
-                    text (str): trecognised text
+                    text (str): recognized text
         '''
-
-        transcription = str(self.model.stt(audio.get_raw_data()))
+        # TODO: Handle models per-language
+        if audio.sample_rate != self.model.sampleRate():
+            LOG.warning(f"Audio SR ({audio.sample_rate}) "
+                        f"different from model: {self.model.sampleRate()}")
+        transcription = str(self.model.stt(np.frombuffer(audio.get_raw_data(),
+                                                         dtype=np.int16)))
         return transcription

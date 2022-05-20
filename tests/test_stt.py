@@ -166,5 +166,6 @@ class TestGetSTT(unittest.TestCase):
         LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
         self.assertTrue(error < 0.3)
 
+
 if __name__ == '__main__':
     unittest.main()

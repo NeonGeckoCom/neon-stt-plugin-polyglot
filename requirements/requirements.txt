@@ -1,10 +1,10 @@
 dataclasses
 ovos-lingua-franca>=0.4.4a2
-tensorflow>=2.3.0
+tensorflow==2.4.0
 ovos-plugin-manager~=0.0.2
 ovos-utils~=0.0.12
 neon_speech
 neon-utils~=0.15,>=0.15.1a18
 wave
 deepspeech
-pyyaml
+pyyaml==5.1

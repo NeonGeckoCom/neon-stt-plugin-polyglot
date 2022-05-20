@@ -1,8 +1,10 @@
-# NeonAI Template STT Plugin Polyglot
+# NeonAI Template STT Plugin Coqui
 [Mycroft](https://mycroft-ai.gitbook.io/docs/mycroft-technologies/mycroft-core/plugins) compatible
 STT Plugin for DeepSpeech Coqui stt models.
 Models description: https://coqui.ai/models
 Includes models for 24 languages:
+
+```
 "en": English
 "uk": Ukrainian
 "de": German
@@ -29,7 +31,7 @@ Includes models for 24 languages:
 "sl": Slovenian
 "cy": Welsh
 "cnh": Hakha Chin
-
+```
 
 # Configuration:
 ```yaml
