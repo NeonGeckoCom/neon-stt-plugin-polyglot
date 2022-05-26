@@ -79,7 +79,7 @@ class CoquiSTT(STT):
         self.model = model
 
         if scorer:
-            self.hot_word_adding()
+            self.hot_word_adding
 
     def hot_word_adding(self):
         if self.lang in ['uk', 'ru']:
