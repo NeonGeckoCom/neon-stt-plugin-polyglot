@@ -70,18 +70,16 @@ class CoquiSTT(STT):
         if scorer:
             try:
                 model.enableExternalScorer(scorer)
-                beam_width = 500
-                model.setBeamWidth(beam_width)
-                self.model = model
-                self.hot_word_adding()
             except RuntimeError as e:
                 LOG.exception(e)
                 LOG.error(f"Not loading external scorer: {scorer}")
         # setting beam width A larger beam width value generates better results at the cost of decoding time
-        else: 
-            beam_width = 500
-            model.setBeamWidth(beam_width)
-            self.model = model
+        beam_width = 500
+        model.setBeamWidth(beam_width)
+        self.model = model
+
+        if scorer:
+            self.hot_word_adding()
 
     def hot_word_adding(self):
         if self.lang in ['uk', 'ru']:
