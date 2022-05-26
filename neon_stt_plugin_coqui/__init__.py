@@ -77,6 +77,14 @@ class CoquiSTT(STT):
         beam_width = 500
         model.setBeamWidth(beam_width)
         self.model = model
+        self.hot_word_adding()
+
+    def hot_word_adding(self):
+        if self.lang in ['uk', 'ru']:
+            self.model.addHotWord('неон', 20.0)
+        else:
+            self.model.addHotWord('neon', 20.0)
+
 
     def get_model(self, model_url: str, scorer_url: Optional[str]):
         '''
