@@ -59,6 +59,7 @@ class CoquiSTT(STT):
         try:
             LOG.info(f"Loading model file: {model}")
             model = deepspeech.Model(model)
+            model.addHotWord('neon', 20.0)
         except RuntimeError as e:
             LOG.exception(e)
             LOG.warning("Retrying model download")
