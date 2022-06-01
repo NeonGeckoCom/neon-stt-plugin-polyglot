@@ -53,6 +53,9 @@ class CoquiSTT(STT):
         super().__init__(config)
 
         self.lang = config.get('lang') or 'en'
+        self.hotwords = config.get('hotwords') or self.hot_word_adding()
+        print()
+        self.hotword_boost = config.get('hotword_boost') or 5.0
 
         # Model creation
         model, scorer = self.download_coqui_model()
@@ -77,6 +80,19 @@ class CoquiSTT(STT):
         beam_width = 500
         model.setBeamWidth(beam_width)
         self.model = model
+
+        if scorer:
+            LOG.info("Adding hot word to model")
+            LOG.info(self.hotwords[self.lang])
+            LOG.info(self.hotword_boost)
+            self.model.addHotWord(self.hotwords[self.lang], self.hotword_boost)
+
+    def hot_word_adding(self):
+        if self.lang in ['uk', 'ru']:
+            return {self.lang: 'неон'}
+        else:
+            return {self.lang: 'neon'}
+
 
     def get_model(self, model_url: str, scorer_url: Optional[str]):
         '''
