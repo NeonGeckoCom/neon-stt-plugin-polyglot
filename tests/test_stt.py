@@ -63,10 +63,10 @@ class TestGetSTT(unittest.TestCase):
                 inference_end = timer() - inference_start
                 LOG.info('Inference took %0.3fs for %0.3fs audio file.' % (inference_end, audio_length))
                 # model's output
-                translit = neon_utils.parse_utils.transliteration(transcription, text, 'pl')
-                LOG.info("Transcription transliterated: "+translit)
-                hypothesis.append(translit)
-                df_list.append([transcription, translit, audio_length, inference_end])
+                # translit = neon_utils.parse_utils.transliteration(transcription, text, 'pl')
+                # LOG.info("Transcription transliterated: "+translit)
+                hypothesis.append(text)
+                df_list.append([transcription, text, audio_length, inference_end])
         error = cer(ground_truth, hypothesis)
         LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
         #creating dataframe
