@@ -76,30 +76,30 @@ class TestGetSTT(unittest.TestCase):
         dataframe.to_csv(df_path)
 
 
-    # def test_en_stt(self):
-    #     LOG.info("ENGLISH STT MODEL")
-    #     male_folder = TEST_PATH_EN+'/male'
-    #     self.evaluation_script(male_folder, 'en', 'en_male_report')
+    def test_en_stt(self):
+        LOG.info("ENGLISH STT MODEL")
+        male_folder = TEST_PATH_EN+'/male'
+        self.evaluation_script(male_folder, 'en', 'en_male_report')
 
-    # def test_fr_stt(self):
-    #     LOG.info("FRENCH STT MODEL")
-    #     female_folder = TEST_PATH_FR+'/female'
-    #     self.evaluation_script(female_folder, 'fr', 'fr_female_report')
+    def test_fr_stt(self):
+        LOG.info("FRENCH STT MODEL")
+        female_folder = TEST_PATH_FR+'/female'
+        self.evaluation_script(female_folder, 'fr', 'fr_female_report')
 
-    # def test_es_stt(self):
-    #     LOG.info("SPANISH STT MODEL")
-    #     female_folder = TEST_PATH_ES+'/female'
-    #     self.evaluation_script(female_folder, 'es', 'es_female_report')
+    def test_es_stt(self):
+        LOG.info("SPANISH STT MODEL")
+        female_folder = TEST_PATH_ES+'/female'
+        self.evaluation_script(female_folder, 'es', 'es_female_report')
 
-    # def test_de_stt(self):
-    #     LOG.info("GERMAN STT MODEL")
-    #     female_folder = TEST_PATH_DE+'/female'
-    #     self.evaluation_script(female_folder, 'de', 'de_female_report')
+    def test_de_stt(self):
+        LOG.info("GERMAN STT MODEL")
+        female_folder = TEST_PATH_DE+'/female'
+        self.evaluation_script(female_folder, 'de', 'de_female_report')
 
-    # def test_uk_stt(self):
-    #     LOG.info("UKRAINIAN STT MODEL")
-    #     female_folder = TEST_PATH_UK+'/female'
-    #     self.evaluation_script(female_folder, 'uk', 'uk_female_report')
+    def test_uk_stt(self):
+        LOG.info("UKRAINIAN STT MODEL")
+        female_folder = TEST_PATH_UK+'/female'
+        self.evaluation_script(female_folder, 'uk', 'uk_female_report')
 
     def test_pl_stt(self):
         LOG.info("POLISH STT MODEL")
