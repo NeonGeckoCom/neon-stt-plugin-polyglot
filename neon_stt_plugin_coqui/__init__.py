@@ -54,7 +54,6 @@ class CoquiSTT(STT):
 
         self.lang = config.get('lang') or 'en'
         self.hotwords = config.get('hotwords') or self.hot_word_adding()
-        print()
         self.hotword_boost = config.get('hotword_boost') or 5.0
 
         # Model creation
