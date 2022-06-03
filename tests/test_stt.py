@@ -29,6 +29,7 @@ import neon_utils.parse_utils
 import unittest
 from jiwer import cer
 from timeit import default_timer as timer
+from datetime import date
 
 ROOT_DIR = os.path.dirname(os.path.realpath(__file__))
 TEST_PATH_EN = os.path.join(ROOT_DIR, "test_audio/en")
@@ -37,43 +38,51 @@ TEST_PATH_ES = os.path.join(ROOT_DIR, "test_audio/es")
 TEST_PATH_PL = os.path.join(ROOT_DIR, "test_audio/pl")
 TEST_PATH_UK = os.path.join(ROOT_DIR, "test_audio/uk")
 
+today = date.today()
+reports_folder = ROOT_DIR+'/test_reports_'+str(today)+'/'
+if os.path.isdir(reports_folder):
+    LOG.info('Reports dir exists')
+else:
+    os.mkdir(reports_folder)
+
 
 class TestGetSTT(unittest.TestCase):
 
-    def test_cnh_stt(self):
-        LOG.info("STT MODEL without Scorer")
-        stt = CoquiSTT('cnh')
-        audio_path = os.path.dirname(os.path.abspath(__file__))+'/test_audio/cnh/cnh_test.wav'
-        LOG.info('Running inference.')
-        inference_start = timer()
-        audio_length, audio_data = stt.get_audio_data(audio_path)
-        text = stt.execute(audio_data)
-        LOG.info("Transcription: "+text)
-        inference_end = timer() - inference_start
-        LOG.info('Inference took %0.3fs for %0.3fs audio file.' % (inference_end, audio_length))
-
-    def test_en_stt(self):
-        LOG.info("ENGLISH STT MODEL")
+    def evaluation_script(self, folder, lang, report_name):
+        today = date.today()
         ground_truth = []
         hypothesis = []
-        for file in os.listdir(TEST_PATH_EN):
-            # desired transcription
-            transcription = ' '.join(file.split('_')[:-1]).lower()
+        df_list = []
+        for file in os.listdir(folder):
+            transcription = ' '.join(file[:-4].split('_')).lower()
             ground_truth.append(transcription)
-            path = ROOT_DIR+'/test_audio/en/'+file
-            stt = CoquiSTT('en')
+            path = folder+'/'+file
+            stt = CoquiSTT(lang)
             LOG.info('Running inference.')
             inference_start = timer()
             audio_length, audio_data = stt.get_audio_data(path)
             text = stt.execute(audio_data)
-            LOG.info("Transcription: "+text)
             inference_end = timer() - inference_start
             LOG.info('Inference took %0.3fs for %0.3fs audio file.' % (inference_end, audio_length))
             # model's output
-            hypothesis.append(text)
+            translit = neon_utils.parse_utils.transliteration(transcription, text, lang)
+            LOG.info("Transcription transliterated: "+translit)
+            hypothesis.append(translit)
+            df_list.append([transcription, text, audio_length, inference_end])
         error = cer(ground_truth, hypothesis)
-        LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
         self.assertTrue(error < 0.3)
+        LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
+        #creating dataframe
+        df_list.append(['CER', error, '', ''])
+        dataframe = pd.DataFrame(df_list, columns=['ground_truth', 'hypothesis', 'audio_length', 'inference_end'])
+        df_path = ROOT_DIR+'/test_reports_'+str(today)+'/'+report_name+'.csv'
+        dataframe.to_csv(df_path)
+
+
+    def test_en_stt(self):
+        LOG.info("ENGLISH STT MODEL")
+        male_folder = TEST_PATH_EN+'/male'
+        self.evaluation_script(male_folder, 'en', 'en_male_report')
 
     def test_fr_stt(self):
         LOG.info("FRENCH STT MODEL")
@@ -147,24 +156,15 @@ class TestGetSTT(unittest.TestCase):
 
     def test_uk_stt(self):
         LOG.info("UKRAINIAN STT MODEL")
-        ground_truth = []
-        hypothesis = []
-        for file in os.listdir(TEST_PATH_UK):
-            transcription = ' '.join(file.split('_')[:-1]).lower()
-            ground_truth.append(transcription)
-            path = ROOT_DIR + '/test_audio/uk/' + file
-            stt = CoquiSTT('uk')
-            LOG.info('Running inference.')
-            inference_start = timer()
-            audio_length, audio_data = stt.get_audio_data(path)
-            text = stt.execute(audio_data)
-            LOG.info("Transcription: "+text)
-            inference_end = timer() - inference_start
-            LOG.info('Inference took %0.3fs for %0.3fs audio file.' % (inference_end, audio_length))
-            hypothesis.append(text)
-        error = cer(ground_truth, hypothesis)
-        LOG.info('Input: {}\nOutput:{}\nWER: {}'.format(ground_truth, hypothesis, error))
-        self.assertTrue(error < 0.3)
+        female_folder = TEST_PATH_UK+'/female'
+        self.evaluation_script(female_folder, 'uk', 'uk_female_report')
+
+    def test_pl_stt(self):
+        LOG.info("POLISH STT MODEL")
+        male_folder = TEST_PATH_PL+'/male'
+        female_folder = TEST_PATH_PL+'/female'
+        self.evaluation_script(male_folder, 'pl', 'pl_report_male')
+        self.evaluation_script(female_folder, 'pl', 'pl_report_female')
 
 
 if __name__ == '__main__':

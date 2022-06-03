@@ -1,0 +1,22 @@
+,ground_truth,hypothesis,audio_length,inference_end
+0,neon what is the capital of ukraine,neon wot is the capital of ukraine,5.461333333333333,4.913519013673067
+1,neon take a picture,neon take a picture,4.458666666666667,4.368056978099048
+2,neon how much coffeine is in coca cola,neon how much caffeine is in cocacola,5.461333333333333,5.564486730843782
+3,neon play a ballet video,neon play a ball a video,6.08,5.672262277454138
+4,neon tell me a joke,neon tell me a joke,4.4159999999999995,4.035258173011243
+5,neon who is the president of poland,neon who is the president of poland,5.504013605442177,5.446806322783232
+6,neon what is the weather in seattle,neon what is the weather in seattle,5.525333333333333,5.20003623701632
+7,neon how do you say thank you for helping me in spanish,neon how do you say thank you for helping me in spanish,6.912,6.470077104866505
+8,neon tell me about pierogie,neon tell me about purdy,5.717333333333333,5.466138055548072
+9,neon who are you,neon who are you,4.16,3.9407890401780605
+10,neon set a timer for ten minutes,neon side timer for ten minutes,4.906666666666666,4.854668661020696
+11,neon what is the distance between seatle and krakov,neon what is the distance between seattle and crack,6.912,7.046700553037226
+12,neon play the latest news,neon plea the latest news,4.522666666666667,4.597116854973137
+13,neon what is twenty plus five,neon what is twenty plus five,5.930666666666666,5.883650774136186
+14,neon launch google chrome,neon lunch google com,4.736,4.458594169467688
+15,neon how many people live in ukraine,neon how many people live in ukraine,5.568004535147392,4.739597804844379
+16,neon play some jazz music,neon please some jazz music,5.0986666666666665,4.71973620261997
+17,neon what is the date,neon what is the date,4.650666666666667,4.5439523523673415
+18,neon who was the first man on the moon,neon who was the first man on the moon,5.568,5.664576411247253
+19,neon what time is it in kharkiv,neon would time is it in carts,4.522666666666667,4.5769676072523
+20,CER,0.048701298701298704,,
