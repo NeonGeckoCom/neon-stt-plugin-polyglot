@@ -1,0 +1,5 @@
+,ground_truth,hypothesis,audio_length,inference_end
+0,il fait beau aujourdhui,il fait beau jourd'hui,2.9649886621315193,2.2022293470799923
+1,bonne journee,non jane,2.45297052154195,1.470045743510127
+2,jaime la france,j'aime la france,3.2209977324263037,1.6950954860076308
+3,CER,0.17647058823529413,,

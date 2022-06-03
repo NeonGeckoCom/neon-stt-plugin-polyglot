@@ -1,0 +1,22 @@
+,ground_truth,hypothesis,audio_length,inference_end
+0,neon jaka jest dzisiaj data,jaka jest dzisiaj data,2.3579583333333334,1.32833878044039
+1,neon ile kofeiny w coca coli,ile kolejne w oka koni,2.5384166666666665,1.5819189762696624
+2,neon włącz muzykę jazzową,leon włącz muzykę że ową,3.2814166666666664,2.4976456938311458
+3,neon czym są pirogy,o czym są progi,2.0254583333333334,1.4550981391221285
+4,neon jaka jest pogoda w seattle,jaka jest pogoda za,2.5809583333333332,1.7882060902193189
+5,neon która jest godzina w charkowie,która jest godzina w charkowie,2.676083333333333,2.3246118305251002
+6,neon kto był pierwszą osobą na księżycu,kto był pierwszą osobą na księżycu,3.0897916666666667,2.2185664670541883
+7,neon opowiedz dowcip,opowiedz dowcip,1.8111249999999999,1.593193057924509
+8,neon jaka jest populacja ukrainy,jaka jest po policja ukrainy,2.775166666666667,2.3323044227436185
+9,neon ile będzie trzydzieści plus pięć,o ile będzie trzydzieści plus pięć,2.841625,2.536202714778483
+10,neon jakie są najnowsze wiadomości,a i najnowszy wiadomości,2.6896666666666667,2.3010706305503845
+11,neon stolica ukrainy,stolica ukrainy,2.002875,1.1327006136998534
+12,neon kim jesteś,kim jesteś,1.682375,0.9579237177968025
+13,neon opowiedz mi o pirogy,opowiedz mi o progi,2.2859583333333333,1.2817596709355712
+14,neon jaka jest odległość między seattle a krakowem,jaka jest odległość między siada prawem,3.6922083333333333,2.794824334792793
+15,neon zrób zdjęcie,leon zrób zdjęcie,4.869458333333333,3.068465947173536
+16,neon jak powiedzieć po hiszpańsku dziękuję za pomoc,a powiedzieć po hiszpańsku dziękuję za pomoc,3.471458333333333,2.9177437918260694
+17,neon uruchom google chrome,leon ruchem go co,5.774416666666666,3.7966156816110015
+18,neon kto jest prezydentem ukrainy,kto jest prezydentem ukrainy,2.778208333333333,1.577772711403668
+19,neon włącz wideo z baletem,leon włącz wino z batem,3.197041666666667,2.571672972291708
+20,CER,0.23389830508474577,,
