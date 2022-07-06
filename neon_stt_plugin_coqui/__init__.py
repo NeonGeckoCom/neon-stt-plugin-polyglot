@@ -28,7 +28,6 @@
 
 
 import numpy as np
-from neon_speech.stt import STT
 from typing import Optional
 import os
 from neon_utils.logger import LOG
@@ -42,6 +41,11 @@ import deepspeech
 from speech_recognition import AudioData
 
 import requests
+
+try:
+    from neon_speech.stt import STT
+except ImportError:
+    from ovos_plugin_manager.templates.stt import STT
 
 
 class CoquiSTT(STT):
