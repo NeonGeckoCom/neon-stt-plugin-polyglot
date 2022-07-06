@@ -3,7 +3,7 @@ ovos-lingua-franca>=0.4.4a2
 tensorflow==2.4.0
 ovos-plugin-manager~=0.0.2
 ovos-utils~=0.0.12
-neon-utils>=0.16,<2.0
+neon-utils[audio]>=0.16,<2.0
 wave
 deepspeech
 pyyaml~=5.1
