@@ -1,0 +1,5 @@
+,ground_truth,hypothesis,audio_length,inference_end
+0,buenos dias,buenos días,1.9196371882086167,1.3599034827202559
+1,yo amo espana,dio a españa,2.922312925170068,1.5901677953079343
+2,adios,a dios,1.940997732426304,1.058193757198751
+3,CER,0.2413793103448276,,

@@ -1,0 +1,5 @@
+,ground_truth,hypothesis,audio_length,inference_end
+0,wie geht es ihnen,wie geht ihnen,2.751655328798186,2.2788055511191487
+1,auf wiedersehen,auf wiedersehen,3.988979591836735,3.338614390231669
+2,guten tag,guten tag,3.028390022675737,2.61887782253325
+3,CER,0.07317073170731707,,

@@ -1,0 +1,78 @@
+en:
+  model_url: https://coqui.gateway.scarf.sh/english/coqui/v0.9.3/model.pbmm
+  scorer_url: https://coqui.gateway.scarf.sh/english/coqui/v0.9.3/coqui-stt-0.9.3-models.scorer
+uk: 
+  model_url: https://coqui.gateway.scarf.sh/ukrainian/robinhad/v0.4/model.pbmm
+  scorer_url: https://coqui.gateway.scarf.sh/ukrainian/robinhad/v0.4/kenlm.scorer
+de:    
+  model_url:  https://coqui.gateway.scarf.sh/german/AASHISHAG/v0.9.0/model.pbmm   
+  scorer_url:  https://coqui.gateway.scarf.sh/german/AASHISHAG/v0.9.0/de-aashishag-1-prune-kenlm.scorer 
+pl:    
+  model_url:  https://coqui.gateway.scarf.sh/polish/jaco-assistant/v0.0.1/model.pbmm   
+  scorer_url:  https://coqui.gateway.scarf.sh/polish/jaco-assistant/v0.0.1/kenlm_pl.scorer 
+es:    
+  model_url:  https://coqui.gateway.scarf.sh/spanish/jaco-assistant/v0.0.1/model.pbmm   
+  scorer_url:  https://coqui.gateway.scarf.sh/spanish/jaco-assistant/v0.0.1/kenlm_es.scorer 
+fr:     
+  model_url:  https://coqui.gateway.scarf.sh/french/commonvoice-fr/v0.6/model.pbmm   
+  scorer_url:  https://coqui.gateway.scarf.sh/french/commonvoice-fr/v0.6/fr-cvfr-2-prune-kenlm.scorer 
+it:    
+  model_url:  https://coqui.gateway.scarf.sh/italian/jaco-assistant/v0.0.1/model.pbmm   
+  scorer_url:  https://coqui.gateway.scarf.sh/italian/jaco-assistant/v0.0.1/kenlm_it.scorer 
+cs:    
+  model_url:  https://coqui.gateway.scarf.sh/czech/comodoro/v0.2.0/model.pbmm   
+  scorer_url:  https://coqui.gateway.scarf.sh/czech/comodoro/v0.2.0/o4-500k-wnc-2011.scorer 
+el:    
+  model_url:  https://coqui.gateway.scarf.sh/greek/itml/v0.1.0/model.pbmm   
+  scorer_url:  https://coqui.gateway.scarf.sh/greek/itml/v0.1.0/Greek-digits-yesno.scorer 
+et:    
+  model_url:  https://coqui.gateway.scarf.sh/estonian/itml/v0.1.0/model.pbmm
+  scorer_url:  https://coqui.gateway.scarf.sh/estonian/itml/v0.1.0/Estonian-digits-yesno.scorer
+hu:
+  model_url:  https://coqui.gateway.scarf.sh/hungarian/itml/v0.1.0/model.pbmm   
+  scorer_url:  https://coqui.gateway.scarf.sh/hungarian/itml/v0.1.0/Hungarian-digits-yesno.scorer
+pt:   
+  model_url:  https://coqui.gateway.scarf.sh/portuguese/itml/v0.1.0/model.pbmm   
+  scorer_url:  https://coqui.gateway.scarf.sh/portuguese/itml/v0.1.0/pt-itml-0-prune-kenlm.scorer 
+ga-IE:    
+  model_url:  https://coqui.gateway.scarf.sh/irish/itml/v0.1.0/model.pbmm   
+  scorer_url:  https://coqui.gateway.scarf.sh/irish/itml/v0.1.0/Irish-digits-yesno.scorer 
+fi:    
+  model_url:  https://coqui.gateway.scarf.sh/finnish/itml/v0.1.0/model.pbmm   
+  scorer_url:  https://coqui.gateway.scarf.sh/finnish/itml/v0.1.0/Finnish-digits-yesno.scorer 
+ka:    
+  model_url:  https://coqui.gateway.scarf.sh/georgian/itml/v0.1.1/model.pbmm   
+  scorer_url:  https://coqui.gateway.scarf.sh/georgian/itml/v0.1.1/Georgian-digits-yesno.scorer 
+ro:    
+  model_url:  https://coqui.gateway.scarf.sh/romanian/itml/v0.1.1/model.pbmm   
+  scorer_url:  https://coqui.gateway.scarf.sh/romanian/itml/v0.1.1/Romanian-digits-yesno.scorer 
+ru:    
+  model_url:  https://coqui.gateway.scarf.sh/russian/jemeyer/v0.1.0/model.pbmm   
+  scorer_url:  https://coqui.gateway.scarf.sh/russian/jemeyer/v0.1.0/wiki-ru-6gram.scorer 
+nl:    
+  model_url:  https://coqui.gateway.scarf.sh/dutch/acabunoc/v0.0.1/model.pbmm   
+  scorer_url:  https://coqui.gateway.scarf.sh/dutch/acabunoc/v0.0.1/nl-acabunoc-1-prune-kenlm.scorer 
+lv:    
+  model_url:  https://coqui.gateway.scarf.sh/latvian/itml/v0.1.1/model.pbmm   
+  scorer_url:  https://coqui.gateway.scarf.sh/latvian/itml/v0.1.1/Latvian-digits-yesno.scorer 
+tr:    
+  model_url:  https://coqui.gateway.scarf.sh/turkish/itml/v0.1.0/model.pbmm   
+  scorer_url:  https://coqui.gateway.scarf.sh/turkish/itml/v0.1.0/Turkish-digits-yesno.scorer 
+tt:    
+  model_url:  https://coqui.gateway.scarf.sh/tatar/itml/v0.1.0/model.pbmm   
+  scorer_url:  https://coqui.gateway.scarf.sh/tatar/itml/v0.1.0/Tatar-digits-yesno.scorer 
+ca:    
+  model_url:  https://coqui.gateway.scarf.sh/catalan/ccoreilly/v0.14.0/model.pbmm   
+  scorer_url:  https://coqui.gateway.scarf.sh/catalan/ccoreilly/v0.14.0/kenlm-aina-3-p10.scorer 
+id:    
+  model_url:  https://coqui.gateway.scarf.sh/indonesian/itml/v0.1.0/model.pbmm   
+  scorer_url:  https://coqui.gateway.scarf.sh/indonesian/itml/v0.1.0/Indonesian-digits-yesno.scorer 
+sl:    
+  model_url:  https://coqui.gateway.scarf.sh/slovenian/itml/v0.1.0/model.pbmm   
+  scorer_url:  https://coqui.gateway.scarf.sh/slovenian/itml/v0.1.0/Slovenian-digits-yesno.scorer 
+cy:    
+  model_url:  https://coqui.gateway.scarf.sh/welsh/techiaith/v21.03/model.pbmm   
+  scorer_url:  https://coqui.gateway.scarf.sh/welsh/techiaith/v21.03/techiaith_bangor_transcribe_21.03.scorer 
+cnh:    
+  model_url:  https://coqui.gateway.scarf.sh/hakha-chin/itml/v0.1.1/model.pbmm  
+  scorer_url: ""
